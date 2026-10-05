@@ -102,13 +102,24 @@ src/
 
 ## Status
 
-- Current phase: 1, Foundation (not started)
+- Current phase: 1, Foundation (done, awaiting review). Phase 2 needs approval and the 21 photographs.
 - Done by hand before Phase 1: create-next-app 16.3.8 (`--empty`, `--agents-md`, App Router, TypeScript, Tailwind CSS, ESLint, `src/`, `@/*`); Node 22 pinned; gsap 3.15.0, @gsap/react 2.1.2 and lenis 1.3.26 installed; docs added; repository on GitHub with Vercel previews.
-- Completed phases: none
-- Open questions: none
+- Completed phases: 1, Foundation (branch `phase-01-foundation`)
+- Open questions:
+  - The `latin` subset next/font downloads has no `→` (U+2192), so "Start a project →" draws its arrow in the fallback font. Hanken Grotesk does have the glyph. Decide in Phase 8.
+  - `(max-width: 1023px)` and `(min-width: 1024px)` both miss fractional widths such as 1023.5px (browser zoom): no motion branch runs there. Range syntax (`width < 1024px`) would close the gap.
+  - The only h1 is the hero headline, so the Phase 1 home page has none until Phase 2.
+  - The footer's Instagram and Behance URLs are not specified.
+  - The grid overlay runs everywhere in development and on /specimen in production. Should Vercel previews get it on every page?
+  - SHOTLIST says next/image produces AVIF and WebP; by default Next 16 produces WebP only (`images.formats`, Phase 9).
 
 ## Implementation notes
 
 Add dated notes here about implementation decisions. Design decisions belong in `DESIGN.md` §12.
 
 - 2026-10-05: `npm audit` reports 5 high-severity advisories in the fresh install. Never run `npm audit fix --force`; review them in Phase 9.
+- 2026-10-05: Tokens are a closed set. `@theme` clears Tailwind's colours, font sizes, line heights, tracking, radius, shadows, blur and keyframe animations, so only NOIR tokens make utilities. Space keys keep Tailwind's 4px steps (`p-4` is 16px; `p-5` does not exist); `margin` and `gutter` are spacing tokens (`px-margin`, `gap-x-gutter`). Breakpoints are `sm` 640px and `lg` 1024px, in px to match the matchMedia strings. `hover:` only applies under `(hover: hover) and (pointer: fine)`.
+- 2026-10-05: `[data-theme]` sets the semantic tokens and also paints `background-color` and `color`, so a section needs nothing else. The navigation, which has no background, will need to opt out in Phase 8.
+- 2026-10-05: `NoirImage` is a server component. It checks `public/images/plates` with `fs` while rendering (at build time for static pages) and renders the placeholder for a missing file; no file from `public/` enters the server trace. Render it from server components and pass it to client motion wrappers as children. The placeholder uses `line` with `fg` text (DESIGN §5 says rule-coloured; `line` is `rule` on paper and `dark-rule` on dark, and `fg-muted` on it is only 3.9:1). Next 16 deprecated `priority` on `next/image`, so the `priority` prop is passed on as `preload`. Motion targets `[data-noir-frame]` and `[data-noir-inner]`.
+- 2026-10-05: Import gsap and its plugins only from `@/lib/gsap`, which registers them and the two noir eases (CustomEase). `useLenis()` from `SmoothScroll` returns the Lenis instance, or null under reduced motion; use it for `scrollTo`. ScrollTrigger refreshes itself on window load; `SmoothScroll` adds a refresh after `document.fonts.ready`.
+- 2026-10-05: Every visible string is in `copy.ts`, including the strip's placeholder captions ("Title" plus the category from SHOTLIST). `plates.ts` holds the alt text and attaches captions by reference; the About portrait has no caption.
