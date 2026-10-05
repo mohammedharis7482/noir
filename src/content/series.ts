@@ -1,0 +1,85 @@
+import { copy, type SeriesCopy } from "./copy";
+import { plates, type Plate, type Ratio } from "./plates";
+
+/*
+ * The five series of Selected work and their frame presets (docs/DESIGN.md
+ * §6.04). The presets give the pinned story its rhythm: large, small,
+ * quiet, large, unexpected. Columns refer to the 12-column desktop grid;
+ * below 1024px every series stacks and the support photographs are omitted.
+ */
+
+/** A photograph's frame on the desktop stage. */
+export type Frame = {
+  readonly plate: Plate;
+  readonly ratio: Ratio;
+  /** First and last grid column, inclusive: cols 6–10 is [6, 10]. */
+  readonly cols: readonly [first: number, last: number];
+  /** Runs off the right edge of the viewport. */
+  readonly bleedsRight?: boolean;
+  /** Where a support photograph sits against the main one. */
+  readonly placement?: "lower" | "high" | "overlaps-main-lower-left";
+  /** A fixed height where the preset names one. */
+  readonly height?: `${number}svh`;
+};
+
+export type Series = {
+  /** Stable key, and the path of a future project page (/work/morning-light). */
+  readonly slug: string;
+  readonly copy: SeriesCopy;
+  readonly feel: "large" | "small" | "quiet" | "unexpected";
+  readonly main: Frame;
+  readonly support: Frame | null;
+};
+
+const [morningLight, betweenStreets, stillWater, afterDark, quietForms] =
+  copy.selectedWork.series;
+
+export const series: readonly Series[] = [
+  {
+    slug: "morning-light",
+    copy: morningLight,
+    feel: "large",
+    main: { plate: plates.p03, ratio: "4:5", cols: [6, 10] },
+    support: {
+      plate: plates.p04,
+      ratio: "3:2",
+      cols: [11, 12],
+      placement: "lower",
+      bleedsRight: true,
+    },
+  },
+  {
+    slug: "between-streets",
+    copy: betweenStreets,
+    feel: "small",
+    main: { plate: plates.p05, ratio: "3:2", cols: [7, 11] },
+    support: { plate: plates.p06, ratio: "3:4", cols: [5, 6], placement: "high" },
+  },
+  {
+    slug: "still-water",
+    copy: stillWater,
+    feel: "quiet",
+    main: { plate: plates.p07, ratio: "16:9", cols: [6, 12], bleedsRight: true },
+    support: null,
+  },
+  {
+    slug: "after-dark",
+    copy: afterDark,
+    feel: "large",
+    main: { plate: plates.p08, ratio: "4:5", cols: [7, 11], height: "82svh" },
+    support: {
+      plate: plates.p09,
+      ratio: "3:2",
+      cols: [5, 7],
+      placement: "overlaps-main-lower-left",
+    },
+  },
+  {
+    // The hierarchy flips: the support photograph is larger than the main.
+    slug: "quiet-forms",
+    copy: quietForms,
+    feel: "unexpected",
+    main: { plate: plates.p10, ratio: "2:3", cols: [10, 11] },
+    support: { plate: plates.p11, ratio: "3:2", cols: [4, 8] },
+  },
+];
