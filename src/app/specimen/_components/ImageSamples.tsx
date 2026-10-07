@@ -11,17 +11,17 @@ const samples: Sample[] = [
   {
     plate: plates.p03, // 4:5
     className: "col-span-3",
-    sizes: "(min-width: 1024px) 20vw, (min-width: 640px) 35vw, 70vw",
+    sizes: "(width >= 1024px) 20vw, (width >= 640px) 35vw, 70vw",
   },
   {
     plate: plates.p02, // 3:2
     className: "col-span-full sm:col-span-5 sm:mt-24",
-    sizes: "(min-width: 1024px) 35vw, (min-width: 640px) 60vw, 90vw",
+    sizes: "(width >= 1024px) 35vw, (width >= 640px) 60vw, 90vw",
   },
   {
     plate: plates.p07, // 16:9
     className: "col-span-full sm:col-span-7",
-    sizes: "(min-width: 1024px) 55vw, (min-width: 640px) 85vw, 90vw",
+    sizes: "(width >= 1024px) 55vw, (width >= 640px) 85vw, 90vw",
   },
 ];
 

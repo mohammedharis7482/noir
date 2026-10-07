@@ -34,11 +34,12 @@ export const stagger = {
 /** Scrubbed tweens trail the scroll by one second. */
 export const scrub = 1;
 
-/** The three gsap.matchMedia() branches every motion hook creates.
- *  The 1024px breakpoint matches --breakpoint-lg in globals.css. */
+/** The three gsap.matchMedia() branches every motion hook creates. Range
+ *  syntax leaves no gap between desktop and mobile, even at fractional
+ *  widths under zoom. 1024px matches --breakpoint-lg in globals.css. */
 export const media = {
-  desktop: "(min-width: 1024px) and (prefers-reduced-motion: no-preference)",
-  mobile: "(max-width: 1023px) and (prefers-reduced-motion: no-preference)",
+  desktop: "(width >= 1024px) and (prefers-reduced-motion: no-preference)",
+  mobile: "(width < 1024px) and (prefers-reduced-motion: no-preference)",
   reduced: "(prefers-reduced-motion: reduce)",
 } as const;
 
