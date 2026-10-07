@@ -1,7 +1,6 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
-import { plateSrc, ratios, type Plate, type Ratio } from "@/content/plates";
-import { hasPlateFile } from "./plate-file";
+import { hasPlateFile, plateSrc, ratios, type Plate, type Ratio } from "@/content/plates";
 
 type NoirImageProps = {
   plate: Plate;
@@ -26,9 +25,9 @@ type NoirImageProps = {
  * layer owns the image and any scale or translate. Motion targets
  * [data-noir-frame] and [data-noir-inner], never the <img> itself.
  *
- * It is a server component because it checks that the file exists. Render
- * it from server components and pass it to client motion wrappers as
- * children.
+ * It renders the same in server and client components: whether a file
+ * exists comes from the build-time manifest in src/content/plate-files.ts,
+ * so nothing here touches the file system.
  */
 export function NoirImage({
   plate,

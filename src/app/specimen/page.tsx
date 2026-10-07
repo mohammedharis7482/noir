@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CONTENT_ID } from "@/components/layout/SkipLink";
 import { copy } from "@/content/copy";
+import { ClientImageSample } from "./_components/ClientImageSample";
 import { GridReadout } from "./_components/GridReadout";
 import { ImageSamples } from "./_components/ImageSamples";
 import { Palette } from "./_components/Palette";
@@ -41,6 +42,7 @@ export default function SpecimenPage() {
 
         <SpecimenSection id="image" title="Image system">
           <ImageSamples />
+          <ClientImageSample />
         </SpecimenSection>
 
         <SpecimenSection id="motion" title="Motion language">

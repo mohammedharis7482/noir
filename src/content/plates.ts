@@ -1,4 +1,5 @@
 import { copy, type Caption } from "./copy";
+import { plateFiles } from "./plate-files";
 
 /*
  * The 21 photographs (docs/SHOTLIST.md). Each file lives in
@@ -236,4 +237,12 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
 /** The photograph's URL under public/. */
 export function plateSrc(plate: Plate): string {
   return `${PLATE_DIRECTORY}/${plate.file}`;
+}
+
+const filesPresent = new Set(plateFiles);
+
+/** Whether the photograph is in public/images/plates, according to the
+ *  manifest scripts/plate-manifest.mjs writes before dev and build. */
+export function hasPlateFile(plate: Plate): boolean {
+  return filesPresent.has(plate.file);
 }
