@@ -69,3 +69,30 @@ Titles, places and years are placeholders. Rewrite them to match each photograph
 ## Final check before handing over
 
 Put all 21 thumbnails together in one view (Finder gallery view or a single Figma frame). If any image jumps out (a different colour cast, a different era, a different mood), replace it. One mismatched photograph is enough to make the whole site read as stock.
+
+## Temporary plates
+
+The plates in `public/images/plates` were generated with AI (ChatGPT) as stand-ins for real photographs. There is no photographer to credit, and `/credits` says so (`DESIGN.md` §12). p01, p02 and p20 have real detail, enlarged 2x with an AI upscaler (EDSR), and can be shown as they are; p20 is 3344px wide, short of the 3840px asked for above. Every plate in the table below must be replaced, under the same file name, before the site is shown publicly.
+
+Most of them were cut from a contact grid and stretched: their detail is soft, their long edge is under the 3000px asked for above, and their file-name labels and white edges have been cropped away.
+
+| File | Why it must be replaced |
+|---|---|
+| `p03-morning-light.jpg` | Cut from a grid: soft; label and white bottom line cropped. |
+| `p04-morning-light-detail.jpg` | Cut from a grid: soft; label and white right edge cropped. |
+| `p05-between-streets.jpg` | Cut from a grid: soft; label and white left edge cropped. Smeared faces and merging figures in the crowd. |
+| `p06-between-streets-detail.jpg` | Cut from a grid: soft; label and white bottom line cropped. The drinking hand and the glass are muddled, and the lettering on the shelves is illegible. |
+| `p07-still-water.jpg` | A black-and-white copy of p02, not a photograph of its own. The series needs calm backwaters. |
+| `p08-after-dark.jpg` | Cut from a grid: soft; label and light top line cropped. |
+| `p09-after-dark-detail.jpg` | Cut from a grid: soft; label and white side edges cropped. |
+| `p10-quiet-forms.jpg` | Cut from a grid: soft; label and light top line cropped. Same subject and light as p15. |
+| `p11-quiet-forms-wide.jpg` | Cut from a grid: soft; label and left seam cropped. Same subject as p18. |
+| `p12-portrait.jpg` | Soft, stretched detail. |
+| `p13-editorial.jpg` | Cut from a grid: soft; white right edge cropped. Badly smeared faces. |
+| `p14-fashion.jpg` | Soft, stretched detail. |
+| `p15-architecture.jpg` | Soft, stretched detail. Same subject and light as p10. |
+| `p16-documentary.jpg` | Soft, stretched detail; the smallest plate (1800×1200). Repeats p02: figures and a boat on bright water under a low sun. |
+| `p17-portrait.jpg` | Cut from a grid: soft; a strip of the neighbouring image and the white gutter cropped from the top. |
+| `p18-architecture.jpg` | Cut from a grid: soft; white side edges and a sliver of the next image cropped. The fins waver. Same subject as p11. |
+| `p19-documentary.jpg` | Cut from a grid: soft; a strip of the neighbouring image and the gutter cropped from the top. |
+| `p21-about.jpg` | Cut from a grid: soft; white top edge cropped. |

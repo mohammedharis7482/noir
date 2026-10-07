@@ -174,20 +174,20 @@ Theme paper. Height 100svh.
 ```
 cols  1    2    3    4    5    6    7    8    9    10   11   12
       NOIR / 001               ┌──────────────────────────────────── bleed →
-      Contemporary             │                                    (bleeds top)
-      photography              │      hero photograph
-                               │      cols 6–12, top 0 → 62svh
-                               │
+      Contemporary             │      top edge: the bottom of the
+      photography              │      64px navigation band
+                               │      hero photograph, cols 6–12,
+                               │      52–62svh tall
                                └────────────────────────────────────
       Every frame                                     Monsoon window
            holds a story.                             Portrait / Palakkad / 2026
 ```
 
-- Photograph: cols 6–12, bleeding off the top and right edges, height 62svh. It reads as roughly 3:2; the crop comes from `focal`.
-- Headline (`display-xl`, the page's only h1): two lines anchored near the bottom. Line 1 starts at col 1; line 2 starts at col 2. It must never overlap the photograph.
-- Metadata `NOIR / 001` and `Contemporary photography` in `meta` at cols 1–3, top-aligned with the photograph's visible top.
-- Caption at cols 10–12, top-aligned with headline line 1.
-- Mobile: photograph full-bleed under the navigation at 4:5 (`focalMobile`), about 62svh tall; metadata, then the headline at about 14vw with line 2 indented one column; caption hidden.
+- Photograph: cols 6–12. Its top edge is the bottom edge of the 64px navigation band, and it bleeds off the right edge only (§12, row 13). It takes the height left above the headline, between 52svh and 62svh, so it reads as roughly 3:2 on taller screens and nearer 2:1 on shorter ones; the crop comes from `focal`.
+- Headline (`display-xl`, the page's only h1): two lines anchored to the bottom margin. Line 1 starts at col 1; line 2 starts at col 2. Here `display-xl` answers to the viewport's height as well as its width: `min(10vw, 14svh)`, kept between 3.5rem and 12rem (§12, row 14). It never touches or overlaps the photograph (at least 32px of paper between them), and its lowest point, the descender of “story”, stays at least the page margin above the bottom edge.
+- Metadata `NOIR / 001` and `Contemporary photography` in `meta` at cols 1–3, top-aligned with the photograph's top edge.
+- Caption at cols 10–12, top-aligned with headline line 1 (capitals with capitals).
+- Mobile: the photograph spans the width directly below the navigation band at 4:5 (`focalMobile`), never taller than 62svh: on tablets, where 4:5 across the width would be taller, the crop widens instead. Then the metadata, then the headline at `min(14vw, 14svh)` with line 2 indented one column; caption hidden.
 
 Motion intent
 
@@ -393,11 +393,12 @@ cols  1    2    3    4    5    6    7    8    9    10   11   12
 Theme dark. 12vh top; the page margin at the bottom.
 
 ```
-|  © 2026 NOIR                     Instagram   Behance                Back to top  |
+|  © 2026 NOIR         Designed and built by Mohammed Haris    Photo credits         Back to top  |
 ```
 
 - One row in `meta`, `fg-muted`. Links are `fg` on hover.
-- No giant wordmark, no local-time clock, no coordinates.
+- `Designed and built by Mohammed Haris` links to https://github.com/mohammedharis7482. `Photo credits` links to `/credits`, the page listing every plate's photographer and source from `src/content/credits.ts`.
+- No social links (NOIR is fictional), no giant wordmark, no local-time clock, no coordinates.
 
 ---
 
@@ -505,20 +506,20 @@ Copy
 
 ## 11. Copy
 
-All copy lives in `src/content/copy.ts`. Captions marked *placeholder* must be rewritten to match the real photographs once they are curated.
+All copy lives in `src/content/copy.ts`. Captions describe the current plates; when a temporary plate is replaced (`SHOTLIST.md`, “Temporary plates”), its caption is rewritten to match the new photograph.
 
 **Navigation:** `NOIR`, `Photography / Visual stories`, `Menu`
 
 **Hero**
 - Headline (h1), with the line break: `Every frame` / `holds a story.`
 - Metadata: `NOIR / 001`, `Contemporary photography`
-- Caption *(placeholder)*: *Monsoon window*, `Portrait / Palakkad / 2026`
+- Caption: *Monsoon window*, `Portrait / Palakkad / 2026`
 
 **Intro**
 - `I photograph light, movement, people and places, and the quiet in between.`
 - Metadata: `Five series`, `2024–2026`
 
-**Featured caption** *(placeholder)*: *Low tide*, `Landscape / Alappuzha / 2026`
+**Featured caption:** *Low tide*, `Landscape / Alappuzha / 2026`
 
 **Selected work**
 - Title: `Selected work`, `2024–2026`
@@ -535,9 +536,17 @@ All copy lives in `src/content/copy.ts`. Captions marked *placeholder* must be r
 **Visual stories**
 - `Visual stories`
 - `Portrait, editorial, fashion, architecture and documentary work, 2024–2026.`
-- Strip captions *(placeholder)*: written after curation, format *Title*, `Category / Place / Year`.
+- Strip captions, p12–p19 in strip order:
+  - *Blue doorway*, `Portrait / Jodhpur / 2025`
+  - *First catch*, `Editorial / Chennai / 2025`
+  - *Kasavu*, `Fashion / Fort Kochi / 2026`
+  - *Four o’clock*, `Architecture / Ahmedabad / 2024`
+  - *Evening haul*, `Documentary / Kollam / 2024`
+  - *Green shawl*, `Portrait / Thrissur / 2025`
+  - *Brise-soleil*, `Architecture / Chandigarh / 2024`
+  - *Looking up*, `Documentary / Howrah / 2026`
 
-**Fullscreen caption** *(placeholder)*: *Before the rain*, `Landscape / Kumbalangi / 2026`
+**Fullscreen caption:** *Before the rain*, `Landscape / Kumbalangi / 2026`
 
 **About**
 - `NOIR is the working name of an independent photographer based in Kerala. For ten years I have photographed people, streets and coastlines across India, on assignment for editorial clients and, more slowly, for myself. I work in natural light, usually with one camera and one lens, and I am more interested in what happens just before and just after a picture than in the picture itself.`
@@ -553,7 +562,7 @@ All copy lives in `src/content/copy.ts`. Captions marked *placeholder* must be r
 - `hello@noir.studio`
 - `Start a project →` (links to `mailto:hello@noir.studio?subject=New%20project`)
 
-**Footer:** `© 2026 NOIR`, `Instagram`, `Behance`, `Back to top`
+**Footer:** `© 2026 NOIR`, `Designed and built by Mohammed Haris` (links to https://github.com/mohammedharis7482), `Photo credits` (links to `/credits`), `Back to top`
 
 ---
 
@@ -571,3 +580,7 @@ All copy lives in `src/content/copy.ts`. Captions marked *placeholder* must be r
 | 8 | Signature moment: paper to darkroom; sections 08–11 are dark | One bold idea, specific to the name NOIR |
 | 9 | Rules limited to two places; radius 0 everywhere | Avoid a broadsheet-template look; the brief bans rounded containers |
 | 10 | Instrument Serif and Hanken Grotesk | The brief left fonts open; both are free and distinctive at their roles |
+| 11 | Footer: no Instagram or Behance links; `Designed and built by Mohammed Haris` (to GitHub) and `Photo credits` (to `/credits`) take their place | NOIR is fictional, so social profiles would lead nowhere; the footer credits the person who built the site and the photographers whose work it shows |
+| 12 | The photographs are AI-generated (ChatGPT) stand-ins. Every plate’s source in `credits.ts` is “Generated with AI (ChatGPT)”, and `/credits` will say so | There is no photographer to credit, and the credits page should say plainly how the images were made. `SHOTLIST.md` lists the plates that must be replaced before the site is shown publicly |
+| 13 | Hero: the photograph's top edge is the bottom of the 64px navigation band, and it bleeds off the right edge only; on mobile it sits directly below the navigation | §6.01 contradicted itself: the photograph bled off the top, but the metadata aligned with its visible top, and a top bleed would have put Menu over the photograph |
+| 14 | Hero: the headline's size answers to the viewport's height as well as its width (`min(10vw, 14svh)` between 3.5rem and 12rem; `min(14vw, 14svh)` below 1024px), and the photograph takes the height left above it, between 52svh and 62svh | At 1440×800 two lines of `display-xl` at 10vw need about 260px, but a 62svh photograph leaves about 190px. Shrinking the type alone would bring the headline down to about 83px, smaller than the intro statement, so the photograph gives way too: at 14svh the headline stays about 1.3 times `display-l`, and the photograph is 54–59svh on common laptop and desktop screens |

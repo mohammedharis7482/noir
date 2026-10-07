@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "node scripts/plate-manifest.mjs && next dev",
+    "build": "node scripts/plate-manifest.mjs && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "plates": "node scripts/plate-manifest.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
