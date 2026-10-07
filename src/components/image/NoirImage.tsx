@@ -16,6 +16,12 @@ type NoirImageProps = {
   ratio?: Ratio | "auto";
   /** Placement and sizing classes for the frame. */
   className?: string;
+  /**
+   * A second layer inside the inner one, for a photograph that two
+   * animations move at once (MOTION.md §2.6): the hero's load settles the
+   * inner layer while its scroll pushes this one, so they never fight.
+   */
+  nested?: boolean;
 };
 
 /**
@@ -23,7 +29,8 @@ type NoirImageProps = {
  *
  * The frame owns the aspect ratio, overflow and any clip-path; the inner
  * layer owns the image and any scale or translate. Motion targets
- * [data-noir-frame] and [data-noir-inner], never the <img> itself.
+ * [data-noir-frame], [data-noir-inner] and, when there is one, the nested
+ * layer [data-noir-nested], never the <img> itself.
  *
  * It renders the same in server and client components: whether a file
  * exists comes from the build-time manifest in src/content/plate-files.ts,
@@ -37,8 +44,27 @@ export function NoirImage({
   focalMobile,
   ratio,
   className,
+  nested = false,
 }: NoirImageProps) {
   const aspect = ratio ?? plate.ratio;
+  const picture = hasPlateFile(plate) ? (
+    <Image
+      src={plateSrc(plate)}
+      alt={plate.alt}
+      fill
+      sizes={sizes}
+      preload={priority}
+      className="object-cover object-(--noir-focal-mobile) lg:object-(--noir-focal)"
+    />
+  ) : (
+    <div
+      role="img"
+      aria-label={plate.alt}
+      className="flex size-full items-center justify-center bg-line text-fg"
+    >
+      <span className="meta">{plate.id}</span>
+    </div>
+  );
   const style = {
     "--noir-ratio": aspect === "auto" ? "auto" : ratios[aspect],
     "--noir-focal": focal,
@@ -55,23 +81,12 @@ export function NoirImage({
       style={style}
     >
       <div data-noir-inner="" className="absolute inset-0">
-        {hasPlateFile(plate) ? (
-          <Image
-            src={plateSrc(plate)}
-            alt={plate.alt}
-            fill
-            sizes={sizes}
-            preload={priority}
-            className="object-cover object-(--noir-focal-mobile) lg:object-(--noir-focal)"
-          />
-        ) : (
-          <div
-            role="img"
-            aria-label={plate.alt}
-            className="flex size-full items-center justify-center bg-line text-fg"
-          >
-            <span className="meta">{plate.id}</span>
+        {nested ? (
+          <div data-noir-nested="" className="absolute inset-0">
+            {picture}
           </div>
+        ) : (
+          picture
         )}
       </div>
     </div>

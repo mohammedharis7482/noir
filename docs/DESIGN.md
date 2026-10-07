@@ -190,10 +190,10 @@ cols  1    2    3    4    5    6    7    8    9    10   11   12
 - Caption at cols 10–12, top-aligned with headline line 1 (capitals with capitals).
 - Mobile: the photograph spans the width directly below the navigation band at 4:5 (`focalMobile`), never taller than 62svh: on tablets, where 4:5 across the width would be taller, the crop widens instead. Then the metadata, then the headline at `min(14vw, 14svh)` with line 2 indented one column; caption hidden.
 
-Motion intent
+Motion intent (the full specification is `MOTION.md` §3)
 
 - **Load** (the only page-load sequence on the site): the photograph fades in while settling from scale 1.08 to 1. The headline lines rise inside line masks, starting 0.4s later with a 0.1s stagger. Metadata and caption fade in last.
-- **Scroll, desktop only:** the hero pins with `pinSpacing: false`. Over about 80vh the photograph's frame opens down and to the left (clip-path on a frame already sized to its end state) while the inner image counter-scales from 1 to 1.08 and its crop drifts by about 4%. The camera pushes in rather than zooming. The headline drifts up more slowly than the scroll and fades out. The Intro section, which has a solid paper background and a higher z-index, then slides up over the photograph like a page laid over a print.
+- **Scroll, desktop only:** the camera leans in (`MOTION.md` §3.2). The hero pins with `pinSpacing: false` for 80% of a viewport while an inner layer of the photograph scales from 1 to 1.1 and rises 3%; the frame itself doesn't change (§12, row 30). The headline drifts up and fades out, and the metadata and caption fade out. The Intro section, which has a solid paper background and a higher z-index, slides up over the photograph like a page laid over a print.
 
 ### 02 Intro statement
 
@@ -440,7 +440,8 @@ cols  1    2    3    4    5    6    7    8    9    10   11   12
 - Two paragraphs in `text-l` at cols 1–7 (max 34ch), 48px apart, the first 64px below the title. In the second, `Mohammed Haris` links to the same GitHub address as the footer. It is underlined: in running text, nothing else would show it is a link.
 - `List of plates` (h2) in `display-m` at col 1, 16vh below the paragraphs, and the list 48px below it.
 - The list is a facts list, as in About, with 1px `rule` lines between rows: all 21 plates in plate order. The plate number in `meta` with tabular figures at col 1, the title in `caption-title` italic at cols 2–6 and the details in `meta` `fg-muted` at cols 7–12, all on one baseline.
-- Each row uses its plate's caption. A support photograph without a caption of its own takes its series title followed by `(detail)` in roman: *Morning Light* (detail). p21, the About portrait, is *Self-portrait*, `Portrait / Kerala / 2026`; in About it stays uncaptioned.
+- Each row uses its plate's caption. A support photograph without a caption of its own takes its series title followed by `(detail)` in roman: *Morning Light* (detail). p11, a wider view of its building rather than a detail, reads *Quiet Forms* (wide view) (§12, row 27). p21, the About portrait, is *Self-portrait*, `Portrait / Kerala / 2026`; in About it stays uncaptioned.
+- When a real photograph replaces a stand-in and `credits.ts` gives it a photographer, its row adds the photographer's name and a link to the photograph's source, and the first paragraph says the photographs were generated with AI unless credited. Build this when the first real photograph arrives (§12, row 28).
 - 20vh below the list, the footer (12vh top, as in §6.11).
 - Mobile and tablet (below 1024px): one column. Each plate's row stacks its number, title and details.
 - Browser tab: `Notes and credits / NOIR`, with a short meta description (§11).
@@ -450,6 +451,8 @@ cols  1    2    3    4    5    6    7    8    9    10   11   12
 ## 7. Motion language
 
 Personality: slow, intentional, precise. Motion behaves like a camera or like paper, never like an interface demo.
+
+`MOTION.md` is the motion specification for every section: ranges, values, order and tests. Where it disagrees with this file about motion, `MOTION.md` wins. Every animation ends exactly at the static layout in §6 (`MOTION.md` §0).
 
 Tokens, defined once in `src/lib/motion.ts`:
 
@@ -464,26 +467,26 @@ Tokens, defined once in `src/lib/motion.ts`:
 | `stagger.lines` | 0.08–0.12s |
 | scrubbed tweens | `scrub: 1` |
 
-Vocabulary: each technique has assigned places. Using a technique anywhere else needs a reason and approval.
+Vocabulary: each technique has assigned places, specified in `MOTION.md` (section numbers below). Using a technique anywhere else needs a reason and approval.
 
 | Technique | Where |
 |---|---|
-| Scale settle (fade in, scale 1.08 → 1) | Hero load only |
-| Camera push (frame opens, inner counter-scale, crop drift) | Hero scroll only |
-| Line mask reveal | Hero headline, Intro, Editorial, Contact, About (smaller), series titles |
-| Clip reveal | Featured photograph |
-| Page-turn layer transition | Selected work |
-| Horizontal scrub | Visual stories |
-| Takeover | Fullscreen moment |
-| Inner drift (crop moves inside a still frame) | Featured, About portrait, strip photographs |
-| Constant drift | Marquee |
+| Scale settle (fade in, scale 1.08 → 1) | Hero load only (`MOTION.md` §3.1) |
+| Camera push (an inner layer scales to 1.1 and drifts while the frame stays still) | Hero scroll only (`MOTION.md` §3.2) |
+| Line mask reveal | Hero headline, Intro, Editorial, Contact, About (smaller), series titles (`MOTION.md` §3.1, §4, §5) |
+| Clip reveal | Featured photograph (`MOTION.md` §4.2) |
+| Page-turn layer transition | Selected work (`MOTION.md` §5) |
+| Horizontal scrub | Visual stories (`MOTION.md` §6) |
+| Takeover | Fullscreen moment (`MOTION.md` §7) |
+| Inner drift (crop moves inside a still frame) | Featured, About portrait, strip photographs, the hero on mobile (`MOTION.md` §3.3, §4, §6) |
+| Constant drift | Marquee (`MOTION.md` §4.5) |
 
 Principles
 
 - Only the hero has a load sequence. Everything else is scrubbed or plays once on entry.
 - Animate `transform`, `opacity` and `clip-path` only.
 - No section uses the generic fade-and-rise entrance.
-- The detailed per-section motion spec (scroll ranges, start and end values, cleanup) is written in `docs/MOTION.md` before the motion phases begin.
+- The detailed per-section motion spec (scroll ranges, start and end values, cleanup) lives in `docs/MOTION.md`.
 
 ---
 
@@ -493,7 +496,7 @@ Breakpoints: mobile below 640px, tablet 640–1023px, desktop 1024px and up. Hov
 
 | Section | Desktop | Mobile and tablet |
 |---|---|---|
-| Hero | load sequence, then pinned camera push; Intro covers it | load sequence only; Intro follows normally |
+| Hero | load sequence, then pinned camera push; Intro covers it | load sequence, then the photograph drifts as the hero leaves (`MOTION.md` §3.3); Intro follows normally |
 | Selected work | pinned page-turn story | stacked series, no index |
 | Visual stories | pinned horizontal scrub | native horizontal scroll with snap |
 | Fullscreen | pinned takeover | full-bleed scale 0.86 → 1 |
@@ -505,7 +508,7 @@ Lenis smooths wheel input only; touch scrolling stays native.
 
 ## 9. Accessibility floor
 
-- **Reduced motion:** no Lenis, no pins, no scrubbed transforms. All content renders in its final state, the marquee is static, and the hero load becomes a 0.3s opacity fade.
+- **Reduced motion:** no Lenis, no pins, no scrubbed transforms. All content renders in its final state, the marquee is static, and the hero is static too (`MOTION.md` §3.4 allows at most a 0.3s fade of the whole hero; there is none).
 - **Contrast:** all text at least 4.5:1 (§2). Text over photographs per §6.07.
 - **Focus:** a 1px solid `currentColor` outline with a 4px offset on every interactive element. A "Skip to content" link comes first in the page.
 - **Semantics:** header and nav, main, footer landmarks; sections labelled by their headings; exactly one h1 per page (the hero headline on the home page, `Notes and credits` on `/credits`).
@@ -615,7 +618,7 @@ All copy lives in `src/content/copy.ts`. Captions describe the current plates; w
 - Meta description: `Notes on NOIR, a concept photography site, and the list of its 21 plates.`
 - `NOIR is a concept site. The photographer and the studio are fictional, and every photograph here was generated with AI (ChatGPT) for this project.`
 - `Designed and built by Mohammed Haris. Set in Instrument Serif and Hanken Grotesk. Built with Next.js, GSAP and Lenis.` (`Mohammed Haris` links to https://github.com/mohammedharis7482)
-- `List of plates`, then each plate's caption; a support photograph without its own caption takes its series title and `(detail)`
+- `List of plates`, then each plate's caption; a support photograph without its own caption takes its series title and `(detail)`, or `(wide view)` for p11
 
 ---
 
@@ -649,3 +652,7 @@ All copy lives in `src/content/copy.ts`. Captions describe the current plates; w
 | 24 | `/credits` has its own composition (§6.12) on paper, footer included, and its own h1, so §9 asks for one h1 per page | §6.11 linked to a page with no composition. Away from the darkroom, a dark footer under a paper page would read as a boxed band (§10) |
 | 25 | 1px rules sit between the rows of a facts list (`FactsList`: About and the list of plates on `/credits`) and in the gallery progress line (§4) | The list of plates uses the same component as About's facts, so it carries the same rules; rules still never divide sections |
 | 26 | Contact below 640px: the statement is set at `min(11vw, 3.5rem)` rather than `display-xl`'s 3.5rem floor (about 43px rather than 56px at 390px wide) | At 56px, “something worth” after its one-column indent needs about 407px, and a 390px phone has 350px, so the statement broke into four lines. The hero's headline already leaves the floor on phones (row 14) |
+| 27 | On `/credits`, p11's row reads *Quiet Forms* (wide view), not (detail) | Accepted after the Phase 2c review. p11 is a wider view of its building, shown larger than the main photograph, not a detail of it |
+| 28 | When a real photograph replaces a stand-in and `credits.ts` gives it a photographer, its `/credits` row adds the photographer and a source link, and the first paragraph says the photographs are AI-generated unless credited (§6.12). Built when the first real photograph arrives | Decided after the Phase 2c review. Until then every plate shares one source, which the first paragraph states |
+| 29 | The other Phase 2c choices stand as built: the paper footer on `/credits` (row 24); its spacings (64px from the title to the paragraphs, 48px from “List of plates” to the list, 20vh from the list to the footer); Contact's email 64px below the statement; Contact on phones at `min(11vw, 3.5rem)` (row 26); below 1024px the footer stacks and About's facts keep two columns | Accepted after the Phase 2c review |
+| 30 | The hero's scroll follows `MOTION.md` §3.2: an inner push layer scales from 1 to 1.1 and rises 3% while the frame stays as it is. It replaces §6.01's frame that “opens down and to the left” | Growing the frame would need a full-viewport frame, which changes the approved rest crop and could cut the man out of it |

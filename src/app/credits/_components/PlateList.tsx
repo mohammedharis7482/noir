@@ -5,8 +5,9 @@ import { plateIds, plates, type Plate } from "@/content/plates";
 /** The five series' captions, which their support photographs share. */
 const seriesCaptions = new Set<Caption>(copy.selectedWork.series);
 
-/** A support photograph without a caption of its own is a detail of its series. */
-function isSeriesDetail(plate: Plate): boolean {
+/** A support photograph without a caption of its own is listed as part of
+ *  its series: a detail, or a wider view (p11). */
+function sharesSeriesCaption(plate: Plate): boolean {
   return plate.role === "series-support" && seriesCaptions.has(plate.caption);
 }
 
@@ -16,9 +17,10 @@ const facts: readonly Fact[] = plateIds.map((id) => {
     id,
     term: id.slice(1),
     descriptions: [
-      isSeriesDetail(plate) ? (
+      sharesSeriesCaption(plate) ? (
         <>
-          {plate.caption.title} <span className="not-italic">{copy.credits.plates.detail}</span>
+          {plate.caption.title}{" "}
+          <span className="not-italic">{copy.credits.plates.views[plate.view ?? "detail"]}</span>
         </>
       ) : (
         plate.caption.title

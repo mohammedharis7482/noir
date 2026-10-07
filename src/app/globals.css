@@ -203,6 +203,45 @@
          0.07em into display-xl's first line. */
       --hero-caption-offset: calc(var(--hero-gap) + 0.07 * var(--display-xl-size));
     }
+
+    /* MOTION.md §3.2: on desktop the pinned hero lies under the Intro and,
+       once released, overlaps the top of Featured. With no background of
+       its own, only its content could show there, and that has faded out
+       by then. The paper behind it is the page's. */
+    background-color: transparent;
+  }
+
+  /* MOTION.md §2.1 and §3.1: the hero before its load sequence, only while
+     motion is on (the inline script sets html[data-motion] before first
+     paint) and until the sequence has run (HeroMotion sets data-loaded).
+     The photograph settles from scale 1.08; the headline waits unseen
+     until its lines, hidden in their masks, can rise. */
+  @media (prefers-reduced-motion: no-preference) {
+    html[data-motion] .hero:not([data-loaded]) {
+      & [data-noir-frame],
+      & [data-hero-fade] > * {
+        opacity: 0;
+      }
+
+      & [data-noir-inner] {
+        transform: scale(1.08);
+      }
+
+      & h1 {
+        visibility: hidden;
+      }
+    }
+  }
+
+  /* The headline's lines while they rise (HeroMotion). The "y" hangs below
+     display-xl's 0.9 line box, so each line carries room for it, and its
+     mask gives that room back: nothing is clipped and nothing moves. */
+  .hero-line {
+    padding-bottom: var(--hero-descender);
+  }
+
+  .hero-line-mask {
+    margin-bottom: calc(-1 * var(--hero-descender));
   }
 
   /* §6.04 Selected work: the stage's type (index, counter, title) sits on

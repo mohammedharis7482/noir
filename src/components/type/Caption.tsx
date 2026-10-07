@@ -1,3 +1,4 @@
+import type { HTMLAttributes } from "react";
 import { captionDetails, type Caption as CaptionCopy } from "@/content/copy";
 
 type CaptionProps = {
@@ -12,15 +13,25 @@ type CaptionProps = {
    *  fullscreen moment. */
   overPhotograph?: boolean;
   className?: string;
-};
+} & Omit<HTMLAttributes<HTMLElement>, "children" | "className">;
 
 /**
  * A catalogue caption (docs/DESIGN.md §1): the title of the work in italic
  * serif, its details in small sans beneath.
  */
-export function Caption({ caption, as: Tag = "div", trim, overPhotograph, className }: CaptionProps) {
+export function Caption({
+  caption,
+  as: Tag = "div",
+  trim,
+  overPhotograph,
+  className,
+  ...attributes
+}: CaptionProps) {
   return (
-    <Tag className={[overPhotograph && "text-white", className].filter(Boolean).join(" ") || undefined}>
+    <Tag
+      {...attributes}
+      className={[overPhotograph && "text-white", className].filter(Boolean).join(" ") || undefined}
+    >
       <p className={trim === "top" ? "caption-title trim-cap" : "caption-title"}>
         {caption.title}
       </p>

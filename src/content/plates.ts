@@ -53,6 +53,9 @@ export type Plate<Id extends PlateId = PlateId> = {
   /** Every plate has one, for the list of plates on /credits. The About
    *  portrait is the only plate shown without its caption on the home page. */
   readonly caption: Caption;
+  /** What a support photograph shows of its series: a detail (the default)
+   *  or a wider view. The list of plates names it after the series title. */
+  readonly view?: "detail" | "wide";
 };
 
 const [morningLight, betweenStreets, stillWater, afterDark, quietForms] =
@@ -156,6 +159,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p11-quiet-forms-wide.jpg",
     role: "series-support",
     ratio: "3:2",
+    view: "wide",
     alt: "A long concrete building with tall vertical fins under a pale sky, with a single person walking past its base",
     caption: quietForms,
   },

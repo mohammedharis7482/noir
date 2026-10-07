@@ -4,6 +4,7 @@ import { GridOverlay } from "@/components/layout/GridOverlay";
 import { SkipLink } from "@/components/layout/SkipLink";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { copy } from "@/content/copy";
+import { motionModeScript } from "@/lib/motion-mode";
 import "./globals.css";
 
 const instrumentSerif = Instrument_Serif({
@@ -29,11 +30,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
+    // The motion-mode script sets data-motion on <html> before React
+    // hydrates, so <html> accepts attributes it didn't render.
     <html
       lang="en"
       data-theme="paper"
       className={`${instrumentSerif.variable} ${hankenGrotesk.variable}`}
+      suppressHydrationWarning
     >
+      <head>
+        {/* MOTION.md §2.1: runs before first paint. */}
+        <script dangerouslySetInnerHTML={{ __html: motionModeScript }} />
+      </head>
       <body>
         <SkipLink />
         <SmoothScroll>{children}</SmoothScroll>

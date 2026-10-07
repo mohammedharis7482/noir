@@ -166,9 +166,12 @@ export const copy = {
     },
     plates: {
       title: "List of plates",
-      // Follows the series title, in roman, for a support photograph without
-      // a caption of its own: "Morning Light (detail)".
-      detail: "(detail)",
+      // Follow the series title, in roman, for a support photograph without a
+      // caption of its own: "Morning Light (detail)", "Quiet Forms (wide view)".
+      views: {
+        detail: "(detail)",
+        wide: "(wide view)",
+      },
     },
   },
 
