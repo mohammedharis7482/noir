@@ -34,7 +34,7 @@ Paper context (sections 00–07)
 | `paper` | `#F4F2ED` | background |
 | `ink` | `#111111` | primary text |
 | `ink-muted` | `#6B6761` | metadata, caption details, inactive states |
-| `rule` | `#D9D6D0` | the two places rules exist; image placeholders |
+| `rule` | `#D9D6D0` | the two places rules exist (§4); image placeholders |
 | `white` | `#FFFFFF` | text over photographs only |
 
 Darkroom context (sections 08–11)
@@ -115,7 +115,7 @@ Space scale (px): 4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256. Section spaci
 Shape
 
 - Border radius is 0 everywhere. No shadows, no blur, no borders around images.
-- 1px rules appear in exactly two places: the About facts list and the gallery progress line. Never as section dividers.
+- 1px rules appear in exactly two places: between the rows of a facts list (`FactsList`, used in About and for the list of plates on `/credits`) and in the gallery progress line. Never as section dividers.
 
 ---
 
@@ -151,6 +151,7 @@ Every photograph renders through one component, `NoirImage`.
 | 09 | Marquee | dark | constant drift |
 | 10 | Contact | dark | slow sequenced reveal |
 | 11 | Footer | dark | none |
+| 12 | Notes and credits (`/credits`, its own page) | paper | none |
 
 Wireframes below show the desktop 12-column grid. Column numbers are inclusive (`cols 6–10` means columns six through ten).
 
@@ -275,7 +276,7 @@ Transition between series (scrubbed; each change uses one viewport of scroll)
 - Counter digits roll vertically. The index row switches at the transition's midpoint.
 - Desktop only: a soft snap to each series' rest point (duration 0.5–0.8s, short delay, `noir.inOut`).
 
-Mobile and tablet (below 1024px): no pin. Each series stacks: main photograph full-bleed at 4:5, then the italic title in `display-m` and the details beneath, left-aligned. Support photographs and the index are omitted. Motion is limited to the inner drift and title line reveals.
+Mobile and tablet (below 1024px): no pin. Each series stacks: main photograph full-bleed at 4:5, never taller than 62svh, as in the hero: on tablets the crop widens instead, framed by `focalMobile`, so the title shows on the same screen as its photograph (§12, row 20). Then the italic title in `display-m` and the details beneath, left-aligned. Support photographs and the index are omitted. Motion is limited to the inner drift and title line reveals.
 
 ### 05 Editorial statement
 
@@ -284,10 +285,10 @@ Theme paper. 30vh top, 30vh bottom. This is the breathing space between the two 
 ```
 cols  1    2    3    4    5    6    7    8    9    10   11   12
       Photography is not about
-                     taking pictures.
+                          taking pictures.
 
-                                          I look for the moments
-                                          between moments.
+                                    I look for the moments
+                                    between moments.
 ```
 
 - The two main lines in `display-l`: line 1 from col 1, line 2 starting at col 5.
@@ -309,11 +310,12 @@ Theme paper. 14vh top. On desktop the section pins for the strip's width minus t
 ```
 
 - First panel: `Visual stories` in `display-m`, then one sentence in `meta`.
-- Eight photographs at varied heights (40–78svh) and vertical positions (some top-aligned, some bottom-aligned, some centred). Gaps vary between 4vw and 12vw.
+- Eight photographs at varied heights (40–66svh) and vertical positions (some top-aligned, some bottom-aligned, some centred). Gaps vary between 4vw and 12vw.
 - Each photograph has a caption at its left edge: italic title plus `Category / Place / Year`.
 - Along the bottom, a 1px progress rule spans the margins and fills with progress; a counter (`03 / 08`, tabular figures) sits at the right.
 - Motion: the strip translates horizontally in direct proportion to scroll (no easing, no snapping). Each photograph's inner layer drifts slightly against the movement (about ±6% horizontally, via `containerAnimation`) to give depth.
 - Mobile and tablet: no pin. A native horizontal scroll container with `scroll-snap-type: x proximity`; photographs about 72vw wide; captions below. The container is keyboard-focusable and labelled.
+- Reduced motion on desktop: no pin. The strip stays a native scroll container, and its scrollbar is visible so it can be moved with a mouse (§12, row 22).
 
 ### 07 Fullscreen moment
 
@@ -336,6 +338,7 @@ cols  1 ...                                    ┌──────────
 - When the pin releases, the photograph scrolls up and the dark About section is directly beneath it. There is no paper spacing after the photograph, so the change of theme is never visible as a transition.
 - Text over the photograph must meet 4.5:1. Choose a photograph with a calm dark area at bottom left; if that can't be guaranteed, put a flat 20% `ink` layer over the whole image. Never a gradient.
 - Mobile: no pin. The photograph is full-bleed at 4:5 (`focalMobile`) and scales from 0.86 to 1 as it passes. The About section's dark background begins at its bottom edge.
+- At rest and under reduced motion the section shows its end state: the photograph fills the viewport (4:5 across the width below 1024px) with its caption in `white` at the bottom left, its last baseline the page margin above the photograph's bottom edge. Measured in Phase 2c, the lightest pixel behind the caption gives at least 13.4:1 at every test viewport, so there is no `ink` layer. Measure again if p20 or its crops change.
 
 ### 08 About
 
@@ -359,7 +362,7 @@ cols  1    2    3    4    5    6    7    8    9    10   11   12
 - Paragraph in `text-l` at cols 7–12, max 34ch.
 - Facts list with 1px `dark-rule` lines between rows: label in `meta` `fg-muted` at cols 7–8, value in `meta` `fg` at cols 9–12.
 - Motion: the paragraph's lines rise through masks (shorter distance and duration than the statements); the portrait's inner image drifts gently.
-- Mobile: portrait at 3:4 across cols 1–3, then the paragraph, then the facts.
+- Mobile: portrait at 3:4 across cols 1–3, then the paragraph, then the facts, each label at cols 1–2 and its value from col 3.
 
 ### 09 Marquee
 
@@ -386,19 +389,61 @@ cols  1    2    3    4    5    6    7    8    9    10   11   12
 - Email in `display-m` at cols 7–12; CTA in `ui` beneath it.
 - Motion: the statement lines rise slowly (1.2s each, 0.18s stagger) when the section reaches 70% of the viewport, then the email (0.8s), then the CTA.
 - Hover, desktop only: the email's underline draws from the left (`scaleX`); the CTA arrow moves 4px to the right.
-- The CTA is a `mailto:` link with a subject line.
+- The CTA is a `mailto:` link with a subject line; the email is a `mailto:` link too.
+- Mobile (below 640px): the statement follows the width at 11vw, up to `display-xl`'s 3.5rem floor rather than stopping at it, so it keeps its three lines and the indented middle line (§12, row 26). Below 1024px the email and CTA start at col 1.
 
 ### 11 Footer
 
 Theme dark. 12vh top; the page margin at the bottom.
 
 ```
-|  © 2026 NOIR         Designed and built by Mohammed Haris    Photo credits         Back to top  |
+|  © 2026 NOIR         Designed and built by Mohammed Haris    Notes and credits     Back to top  |
 ```
 
 - One row in `meta`, `fg-muted`. Links are `fg` on hover.
-- `Designed and built by Mohammed Haris` links to https://github.com/mohammedharis7482. `Photo credits` links to `/credits`, the page listing every plate's photographer and source from `src/content/credits.ts`.
+- `Designed and built by Mohammed Haris` links to https://github.com/mohammedharis7482. `Notes and credits` links to `/credits` (§6.12), which says how NOIR was made and lists every plate (§12, row 23).
+- `Back to top` scrolls to the top of the page (with Lenis when it runs, natively otherwise) and moves focus to the skip link, so the next Tab starts from the top.
+- Mobile and tablet (below 1024px): the four items stack in the same order, 12px apart.
 - No social links (NOIR is fictional), no giant wordmark, no local-time clock, no coordinates.
+
+### 12 Notes and credits (`/credits`)
+
+The page the footer links to: how NOIR was made, who built it, and every plate. Theme paper throughout, footer included. The page has the home page's navigation (the wordmark links to `/`) and footer but no darkroom, and a dark footer alone under a paper page would read as a boxed band (§10).
+
+```
+cols  1    2    3    4    5    6    7    8    9    10   11   12
+      Notes and credits
+
+      NOIR is a concept site. The
+      photographer and the studio are
+      fictional, and every photograph …
+
+      Designed and built by Mohammed
+      Haris. Set in Instrument Serif …
+
+      List of plates
+
+      01   Monsoon window           Portrait / Palakkad / 2026
+      ────────────────────────────────────────────────────────────
+      02   Low tide                 Landscape / Alappuzha / 2026
+      ────────────────────────────────────────────────────────────
+      03   Morning Light            Portrait / Kerala / 2026
+      ────────────────────────────────────────────────────────────
+      04   Morning Light (detail)   Portrait / Kerala / 2026
+      ────────────────────────────────────────────────────────────
+      …
+      ────────────────────────────────────────────────────────────
+      21   Self-portrait            Portrait / Kerala / 2026
+```
+
+- `Notes and credits`, the page's h1, in `display-l` at cols 1–8, its capitals 20vh below the navigation band.
+- Two paragraphs in `text-l` at cols 1–7 (max 34ch), 48px apart, the first 64px below the title. In the second, `Mohammed Haris` links to the same GitHub address as the footer. It is underlined: in running text, nothing else would show it is a link.
+- `List of plates` (h2) in `display-m` at col 1, 16vh below the paragraphs, and the list 48px below it.
+- The list is a facts list, as in About, with 1px `rule` lines between rows: all 21 plates in plate order. The plate number in `meta` with tabular figures at col 1, the title in `caption-title` italic at cols 2–6 and the details in `meta` `fg-muted` at cols 7–12, all on one baseline.
+- Each row uses its plate's caption. A support photograph without a caption of its own takes its series title followed by `(detail)` in roman: *Morning Light* (detail). p21, the About portrait, is *Self-portrait*, `Portrait / Kerala / 2026`; in About it stays uncaptioned.
+- 20vh below the list, the footer (12vh top, as in §6.11).
+- Mobile and tablet (below 1024px): one column. Each plate's row stacks its number, title and details.
+- Browser tab: `Notes and credits / NOIR`, with a short meta description (§11).
 
 ---
 
@@ -463,7 +508,7 @@ Lenis smooths wheel input only; touch scrolling stays native.
 - **Reduced motion:** no Lenis, no pins, no scrubbed transforms. All content renders in its final state, the marquee is static, and the hero load becomes a 0.3s opacity fade.
 - **Contrast:** all text at least 4.5:1 (§2). Text over photographs per §6.07.
 - **Focus:** a 1px solid `currentColor` outline with a 4px offset on every interactive element. A "Skip to content" link comes first in the page.
-- **Semantics:** header and nav, main, footer landmarks; sections labelled by their headings; exactly one h1 (the hero headline).
+- **Semantics:** header and nav, main, footer landmarks; sections labelled by their headings; exactly one h1 per page (the hero headline on the home page, `Notes and credits` on `/credits`).
 - **Keyboard:** the menu traps focus and closes with Escape; the mobile strip is focusable and labelled; index rows in Selected work are buttons.
 - **Alt text** per §5. Marquee duplicates are `aria-hidden`.
 
@@ -554,6 +599,7 @@ All copy lives in `src/content/copy.ts`. Captions describe the current plates; w
   - `Based`: Kerala, India
   - `Working`: India and the Gulf
   - `Commissions`: Editorial, portrait, architecture
+- Portrait caption, shown only in the list of plates on `/credits`: *Self-portrait*, `Portrait / Kerala / 2026`
 
 **Marquee:** `Photography / Portrait / Editorial / Documentary / Architecture /`
 
@@ -562,7 +608,14 @@ All copy lives in `src/content/copy.ts`. Captions describe the current plates; w
 - `hello@noir.studio`
 - `Start a project →` (links to `mailto:hello@noir.studio?subject=New%20project`)
 
-**Footer:** `© 2026 NOIR`, `Designed and built by Mohammed Haris` (links to https://github.com/mohammedharis7482), `Photo credits` (links to `/credits`), `Back to top`
+**Footer:** `© 2026 NOIR`, `Designed and built by Mohammed Haris` (links to https://github.com/mohammedharis7482), `Notes and credits` (links to `/credits`), `Back to top`
+
+**Notes and credits (`/credits`)**
+- Title (h1, and the browser tab's `Notes and credits / NOIR`): `Notes and credits`
+- Meta description: `Notes on NOIR, a concept photography site, and the list of its 21 plates.`
+- `NOIR is a concept site. The photographer and the studio are fictional, and every photograph here was generated with AI (ChatGPT) for this project.`
+- `Designed and built by Mohammed Haris. Set in Instrument Serif and Hanken Grotesk. Built with Next.js, GSAP and Lenis.` (`Mohammed Haris` links to https://github.com/mohammedharis7482)
+- `List of plates`, then each plate's caption; a support photograph without its own caption takes its series title and `(detail)`
 
 ---
 
@@ -588,3 +641,11 @@ All copy lives in `src/content/copy.ts`. Captions describe the current plates; w
 | 16 | Hero on tablets (640–1023px): the photograph spans the width at no more than 62svh, about 1.2:1 at 768×1024, rather than 4:5 | Accepted after the Phase 2a review. 4:5 across a tablet's width would be about 94svh and push the headline off the first screen |
 | 17 | Hero on 16:9 laptop screens: the photograph reads at about 1.9:1 rather than 3:2, and the headline stays at 14svh | Accepted after the Phase 2a review. A taller photograph would need a smaller headline, and 14svh keeps the headline clearly larger than the intro statement |
 | 18 | The strip captions for p12–p19 (§11) stand while those plates are temporary; each is rewritten when its plate is replaced | Accepted after the Phase 2a review |
+| 19 | Editorial statement (§6.05): line 2 starts at col 5 and the supporting line spans cols 7–11. The wireframe was redrawn to match the text | The wireframe set them at col 4 and col 8; the text was confirmed after the Phase 2b review |
+| 20 | Selected work below 1024px: each series photograph spans the width at 4:5 but is never taller than 62svh, as in the hero (row 16), with the crop set by `focalMobile` | 4:5 across a tablet's width is about 94svh at 768×1024, which pushed the series title off the screen. Capped, the title shows on the same screen as its photograph |
+| 21 | Visual stories: the photographs are 40–66svh tall, not 40–78svh | At 1280×720 the tallest photograph and its caption must fit above the progress rule |
+| 22 | Visual stories under reduced motion on desktop: the strip stays a native scroll container with its scrollbar visible (Phase 6) | Without the pin, a mouse can only move the strip with a scrollbar it can see |
+| 23 | The footer's `Photo credits` becomes `Notes and credits` (§6.11, §11) | The page it opens also says how NOIR was made and who built it |
+| 24 | `/credits` has its own composition (§6.12) on paper, footer included, and its own h1, so §9 asks for one h1 per page | §6.11 linked to a page with no composition. Away from the darkroom, a dark footer under a paper page would read as a boxed band (§10) |
+| 25 | 1px rules sit between the rows of a facts list (`FactsList`: About and the list of plates on `/credits`) and in the gallery progress line (§4) | The list of plates uses the same component as About's facts, so it carries the same rules; rules still never divide sections |
+| 26 | Contact below 640px: the statement is set at `min(11vw, 3.5rem)` rather than `display-xl`'s 3.5rem floor (about 43px rather than 56px at 390px wide) | At 56px, “something worth” after its one-column indent needs about 407px, and a 390px phone has 350px, so the statement broke into four lines. The hero's headline already leaves the floor on phones (row 14) |

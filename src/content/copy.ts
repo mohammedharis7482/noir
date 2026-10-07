@@ -24,6 +24,9 @@ export type Caption = {
 /** One of the five series in Selected work. */
 export type SeriesCopy = Caption & { readonly number: string };
 
+/** Mohammed Haris on GitHub: linked from the footer and from /credits. */
+const BUILT_BY_HREF = "https://github.com/mohammedharis7482";
+
 export const copy = {
   nav: {
     wordmark: "NOIR",
@@ -106,6 +109,14 @@ export const copy = {
       { label: "Working", value: "India and the Gulf" },
       { label: "Commissions", value: "Editorial, portrait, architecture" },
     ],
+    // The portrait's caption appears only in the list of plates on /credits;
+    // in About the portrait stands without one (§6.08).
+    caption: {
+      title: "Self-portrait",
+      category: "Portrait",
+      place: "Kerala",
+      year: 2026,
+    } satisfies Caption,
   },
 
   marquee: {
@@ -116,7 +127,10 @@ export const copy = {
 
   contact: {
     statement: ["Let’s create", "something worth", "remembering."],
-    email: "hello@noir.studio",
+    email: {
+      label: "hello@noir.studio",
+      href: "mailto:hello@noir.studio",
+    },
     cta: {
       label: "Start a project →",
       href: "mailto:hello@noir.studio?subject=New%20project",
@@ -127,13 +141,35 @@ export const copy = {
     copyright: "© 2026 NOIR",
     builtBy: {
       label: "Designed and built by Mohammed Haris",
-      href: "https://github.com/mohammedharis7482",
+      href: BUILT_BY_HREF,
     },
-    photoCredits: {
-      label: "Photo credits",
+    credits: {
+      label: "Notes and credits",
       href: "/credits",
     },
     backToTop: "Back to top",
+  },
+
+  credits: {
+    // The h1, and the browser tab's "Notes and credits / NOIR" through the
+    // root layout's title template.
+    title: "Notes and credits",
+    description: "Notes on NOIR, a concept photography site, and the list of its 21 plates.",
+    // Two paragraphs: the concept, then the colophon, in which "Mohammed
+    // Haris" links to GitHub, as in the footer.
+    concept:
+      "NOIR is a concept site. The photographer and the studio are fictional, and every photograph here was generated with AI (ChatGPT) for this project.",
+    colophon: {
+      before: "Designed and built by ",
+      link: { label: "Mohammed Haris", href: BUILT_BY_HREF },
+      after: ". Set in Instrument Serif and Hanken Grotesk. Built with Next.js, GSAP and Lenis.",
+    },
+    plates: {
+      title: "List of plates",
+      // Follows the series title, in roman, for a support photograph without
+      // a caption of its own: "Morning Light (detail)".
+      detail: "(detail)",
+    },
   },
 
   accessibility: {

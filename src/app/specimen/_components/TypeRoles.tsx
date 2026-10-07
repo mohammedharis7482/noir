@@ -27,7 +27,7 @@ const roles: Role[] = [
     name: "display-m",
     spec: "Instrument Serif / clamp(2rem, 3.6vw, 3.75rem) / 1.05 / -0.01em",
     className: "display-m",
-    lines: [copy.contact.email],
+    lines: [copy.contact.email.label],
   },
   {
     name: "text-l",

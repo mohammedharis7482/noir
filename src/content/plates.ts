@@ -50,8 +50,9 @@ export type Plate<Id extends PlateId = PlateId> = {
   readonly ratio: Ratio;
   /** Describes the photograph, never its role. */
   readonly alt: string;
-  /** The About portrait is the only plate shown without a caption. */
-  readonly caption?: Caption;
+  /** Every plate has one, for the list of plates on /credits. The About
+   *  portrait is the only plate shown without its caption on the home page. */
+  readonly caption: Caption;
 };
 
 const [morningLight, betweenStreets, stillWater, afterDark, quietForms] =
@@ -232,6 +233,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     role: "about",
     ratio: "3:4",
     alt: "A man seen from behind stands on a wet beach at dusk with a camera in one hand, facing the waves",
+    caption: copy.about.caption,
   },
 };
 

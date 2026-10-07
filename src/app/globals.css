@@ -212,7 +212,9 @@
     --stage-inset: 12svh;
   }
 
-  /* §9 The skip link comes first in the page and shows only on focus. */
+  /* §9 The skip link comes first in the page and shows only on keyboard
+     focus. Back to top (§6.11) returns focus here; after a mouse click it
+     stays hidden, as :focus-visible doesn't match. */
   .skip-link {
     position: fixed;
     top: var(--spacing-4);
@@ -223,7 +225,7 @@
     color: var(--color-fg);
   }
 
-  .skip-link:not(:focus) {
+  .skip-link:not(:focus-visible) {
     width: 1px;
     height: 1px;
     padding: 0;

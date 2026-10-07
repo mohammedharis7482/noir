@@ -35,7 +35,7 @@ A fictional photography portfolio designed as an exhibition catalogue: photograp
 3. Hero motion: load sequence and camera push
 4. Typography motion: Intro, Editorial, Contact, About
 5. Selected work: the pinned page-turn story
-6. Visual stories: the horizontal strip
+6. Visual stories: the horizontal strip. In the reduced-motion branch on desktop the strip must stay usable with a mouse, so its native scrollbar must be visible there (`DESIGN.md` §12, row 22).
 7. Fullscreen moment: the takeover into the darkroom
 8. Micro-interactions and navigation: nav behaviour, menu, hover details, CTA. Add → (U+2192) to Hanken Grotesk with a small self-hosted subset declared with `unicode-range`, so the CTA arrow never falls back to another font.
 9. Performance: images (AVIF through `images.formats`), ScrollTrigger count, mobile, memory, cleanup, `npm audit` review
@@ -61,12 +61,13 @@ public/images/plates/    photographs, named as in docs/SHOTLIST.md
 scripts/                 plate-manifest.mjs (lists the photographs present for NoirImage)
 src/
   app/                   routes, root layout, globals.css (tokens)
+    credits/             Notes and credits (DESIGN.md §6.12); its list of plates in _components
     specimen/            dev-only specimen page (noindex, not linked from the site)
   components/
-    layout/              Navigation, Footer, Grid
+    layout/              Navigation, Footer, BackToTop, SkipLink, GridOverlay
     sections/            one folder per homepage section
     image/               NoirImage
-    type/                display text components
+    type/                Caption, FactsList
     motion/              SmoothScroll provider and reusable motion components
   content/               copy.ts, plates.ts, series.ts, credits.ts, plate-files.ts (generated)
   lib/                   gsap.ts (plugin registration), motion.ts (eases, durations, media conditions)
@@ -106,16 +107,17 @@ src/
 
 ## Status
 
-- Current phase: 2b, Selected work, Editorial statement and Visual stories (done, awaiting review). Phase 2c needs approval.
+- Current phase: 2c, Fullscreen moment, About, Marquee, Contact, Footer and `/credits` (done, awaiting review). Phase 3 needs approval.
 - Done by hand before Phase 1: create-next-app 16.3.8 (`--empty`, `--agents-md`, App Router, TypeScript, Tailwind CSS, ESLint, `src/`, `@/*`); Node 22 pinned; gsap 3.15.0, @gsap/react 2.1.2 and lenis 1.3.26 installed; docs added; repository on GitHub with Vercel previews.
-- Completed phases: 1, Foundation (branch `phase-01-foundation`); 2a, with the photo intake (branch `photos-intake`); 2b (branch `phase-02b-middle`)
+- Completed phases: 1, Foundation (branch `phase-01-foundation`); 2a, with the photo intake (branch `photos-intake`); 2b (branch `phase-02b-middle`); 2c (branch `phase-02c-end`)
 - Photographs: all 21 plates are in `public/images/plates`, generated with AI as stand-ins. The temporary plates listed in `docs/SHOTLIST.md` must be replaced, under the same file names, before launch.
 - Open questions:
-  - `/credits` (Phase 2c) has no composition in `DESIGN.md` §6 yet; propose one at the start of Phase 2c.
-  - §6.05's wireframe sets line 2 of the editorial statement at col 4 and the supporting line at col 8; the text says col 5 and cols 7–11. Phase 2b follows the text.
-  - Below 1024px each Selected work series is 4:5 across the full width (§6.04), which is about 94svh on a 768×1024 tablet. Cap it as the tablet hero was (§12, row 16)?
+  - p11 is a wider view of its building, not a detail, but under the rule for support photographs the list of plates calls it “Quiet Forms (detail)”. Give it a caption of its own?
+  - When a real photograph replaces a stand-in, `/credits` has no place for its photographer and source (`credits.ts`), and its first paragraph says every photograph was generated with AI. Add the credit to the plate's row then?
+  - Phase 2c filled gaps the docs left open; confirm or change: the `/credits` footer is paper (§12, row 24); on `/credits` the paragraphs start 64px below the title, the list 48px below “List of plates” and the footer 20vh below the list; Contact's email starts 64px below the statement; on phones the Contact statement is `min(11vw, 3.5rem)` (§12, row 26); below 1024px the footer stacks and About's facts keep two columns.
 - Decided after Phase 1 review: the home page has no h1 until the hero exists (Phase 2); AVIF waits for Phase 9; the CTA arrow is a Phase 8 task.
 - Decided after Phase 2a review (`DESIGN.md` §12, rows 15–18): §4 rule 3 applies to the image-led signature sections only; the tablet hero at 62svh and the 16:9 hero photograph at about 1.9:1 are accepted, with the headline at 14svh; the p12–p19 captions stand while those plates are temporary.
+- Decided after Phase 2b review (`DESIGN.md` §12, rows 19–22): the editorial wireframe follows the text (line 2 at col 5, the supporting line at cols 7–11); below 1024px each Selected work photograph is capped at 62svh and cropped with `focalMobile`; strip photographs are 40–66svh; under reduced motion on desktop the strip shows its native scrollbar (Phase 6).
 
 ## Implementation notes
 
@@ -126,13 +128,18 @@ Add dated notes here about implementation decisions. Design decisions belong in 
 - 2026-10-05: `[data-theme]` sets the semantic tokens and also paints `background-color` and `color`, so a section needs nothing else. The navigation, which has no background, will need to opt out in Phase 8.
 - 2026-10-05: `NoirImage`'s placeholder uses `line` with `fg` text (DESIGN §5 says rule-coloured; `line` is `rule` on paper and `dark-rule` on dark, and `fg-muted` on it is only 3.9:1). Next 16 deprecated `priority` on `next/image`, so the `priority` prop is passed on as `preload`. Motion targets `[data-noir-frame]` and `[data-noir-inner]`.
 - 2026-10-05: Import gsap and its plugins only from `@/lib/gsap`, which registers them and the two noir eases (CustomEase). `useLenis()` from `SmoothScroll` returns the Lenis instance, or null under reduced motion; use it for `scrollTo`. ScrollTrigger refreshes itself on window load; `SmoothScroll` adds a refresh after `document.fonts.ready`.
-- 2026-10-05: Every visible string is in `copy.ts`, including the strip's placeholder captions ("Title" plus the category from SHOTLIST). `plates.ts` holds the alt text and attaches captions by reference; the About portrait has no caption.
+- 2026-10-05: Every visible string is in `copy.ts`, including the strip's placeholder captions ("Title" plus the category from SHOTLIST). `plates.ts` holds the alt text and attaches captions by reference. (Since 2c every plate has a caption; the About portrait's is shown only on `/credits`.)
 - 2026-10-07: `NoirImage` never touches the file system, so it renders the same in server and client components. `scripts/plate-manifest.mjs` lists `public/images/plates` into `src/content/plate-files.ts` (committed; `npm run dev`, `npm run build` and `npm run plates` rewrite it), and `hasPlateFile()` in `plates.ts` reads it. A manifest rather than props: no section has to thread an availability flag down to every image, and the server render and the browser read the same data, so hydration always agrees. With the dev server running, run `npm run plates` after adding photographs. `ClientImageSample` on /specimen renders `NoirImage` inside a client component as a standing test.
 - 2026-10-07: The matchMedia conditions use range syntax (`width >= 1024px`, `width < 1024px`), so no fractional width falls between desktop and mobile.
 - 2026-10-07: The grid overlay is mounted once, in the root layout. It responds to `g` on every page in development and Vercel previews (`NEXT_PUBLIC_VERCEL_ENV === "preview"`), and only on /specimen in production.
 - 2026-10-07: The plates were cropped, enlarged (p01, p02, p20, 2x with EDSR) and exported with Pillow and OpenCV in a temporary Python environment outside the project; nothing was added to `package.json`. Next's image optimizer caches resized images for at least 4 hours and cannot invalidate them, so after replacing a plate under the same file name, delete `.next/cache/images` locally (during 2a a stale test image from an earlier session showed up at one width).
-- 2026-10-07: The navigation is laid over the top 64px of the page (`absolute`, `h-nav`), so the hero's 100svh includes the band. The home page renders it; Phase 8 makes it fixed, and `/credits` (2c) will need it too, so it may move into a shared layout then.
-- 2026-10-07: The hero's sizes live in `globals.css` (`.hero`): `display-xl` reads `--display-xl-size`, which only the hero sets, and the photograph's height is `--hero-photo`. Every type role records `--cap-inset` and `--baseline-inset` from the font metrics; `trim-cap` and `trim-baseline` pull a line box in so the capitals or the baseline, not the box, meet an edge. For text against text, use grid baseline alignment (`items-baseline-last`). `bleed-right` reaches the viewport edge from inside the page grid; `indent-column` indents by one column and its gutter.
+- 2026-10-07: The navigation is laid over the top 64px of the page (`absolute`, `h-nav`), so the hero's 100svh includes the band. The home page and `/credits` each render it, with the footer; Phase 8 makes it fixed, and the two may move into a shared layout then.
+- 2026-10-07: The hero's sizes live in `globals.css` (`.hero`): `display-xl` reads `--display-xl-size`, which the hero sets (and Contact, on phones), and the photograph's height is `--hero-photo`. Every type role records `--cap-inset` and `--baseline-inset` from the font metrics; `trim-cap` and `trim-baseline` pull a line box in so the capitals or the baseline, not the box, meet an edge. For text against text, use grid baseline alignment (`items-baseline-last`). `bleed-right` reaches the viewport edge from inside the page grid; `indent-column` indents by one column and its gutter.
 - 2026-10-07: Selected work renders both versions and hides one per breakpoint: `SeriesStory` (desktop, client) and `SeriesStack` (below 1024px, server). Lazy images inside the hidden version never load. `SeriesStory` holds every stage's layers (`StageLayers`: root, index, counter, main, support, title) through `useImperativeHandle`, for Phase 5's pinned stage; the stacked stages stay as its reduced-motion fallback. Index rows scroll with `lenis.scrollTo`, or `scrollIntoView` when Lenis is off, and move focus to the stage.
 - 2026-10-07: On each 100svh stage the type sits on two lines, `--stage-inset` (12svh) in from the top and bottom, and the photographs' placements in `series.ts` hang from the same lines (high, lower, overlapping), so alignments hold on every screen shape. Frames are direct items of the stage grid, all in row 1: auto-placement would move a frame that starts left of the previous one into a second row. Morning Light's main photograph is fixed at 76svh so After Dark (82svh) stays the taller one on 16:9 screens.
 - 2026-10-07: Visual stories reads heights, alignments and gaps from `src/content/strip.ts`; heights stop at 66svh so the tallest photograph and its caption fit above the progress rule at 1280×720. The strip is a native scroll container for now (`role="region"`, labelled by its heading, `tabIndex={0}`, scrollbar hidden on desktop, `scroll-snap-type: x proximity` below 1024px); the progress rule and counter are static until Phase 6. `indent-cols-*` indents by N columns and gutters. At `display-l`, italic descenders reach 0.215em, so series titles keep 8px above their details.
+- 2026-10-07: `FactsList` (`components/type`) is a `<dl>` whose rows are subgrids of the page grid, so every cell sits on the page's columns and the cells of a row share a baseline (`items-baseline`). Callers pass each cell's type and column classes. The rules are `divide-y divide-line`, so they are `rule` on paper and `dark-rule` on dark; the first row's top padding and the last row's bottom padding are removed, so the list's edges are its text. About uses it for its facts, `/credits` for the 21 plates.
+- 2026-10-07: `Plate.caption` is now required: p21's (*Self-portrait*) lives in `copy.about.caption` and is shown only in the list of plates. The list (`app/credits/_components/PlateList.tsx`) calls a support plate a detail when its caption is its series' caption object, so giving a support plate its own caption removes “(detail)” by itself.
+- 2026-10-07: The fullscreen moment renders its end state: the section is paper and ends at the photograph's bottom edge, so About's dark begins there; pixel rows at the join show no paper at any test viewport. The caption's background was measured from screenshots with the caption hidden: the lightest pixel behind the text gives 13.4:1 at 390×844 and at least 18.5:1 elsewhere, so there is no ink layer. `Caption` takes `overPhotograph` for white text.
+- 2026-10-07: `Footer` takes a `theme` (dark on the home page, paper on `/credits`). `BackToTop` is an `<a href="#top">`, which reaches the top even without JavaScript; with it, the link scrolls with Lenis (or natively under reduced motion) and focuses the skip link, found by its id (`SKIP_LINK_ID`) because it lives in the root layout. The skip link now shows on `:focus-visible`, so it appears after keyboard use but not after a mouse click on Back to top.
+- 2026-10-07: Below 1024px `SeriesStack` sizes each main photograph like the hero, `h-[min(125vw,62svh)]` with `ratio="auto"`, and crops it with the frame's `focalMobile` (`series.ts`). On phones Contact sets `--display-xl-size: min(11vw, 3.5rem)` so its statement keeps three lines (§12, row 26). `copy.contact.email` is now `{ label, href }`, and the GitHub address is one constant shared by the footer and `/credits`.

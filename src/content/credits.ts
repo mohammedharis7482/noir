@@ -1,10 +1,11 @@
 import type { PlateId } from "./plates";
 
 /*
- * Photographer and source for every plate (docs/DESIGN.md §5), shown on
- * /credits. The current plates were generated with AI and have no
- * photographer (DESIGN.md §12); when a plate is replaced with a photograph
- * (docs/SHOTLIST.md, "Temporary plates"), give it its own entry.
+ * Photographer and source for every plate (docs/DESIGN.md §5). The current
+ * plates were generated with AI and have no photographer (DESIGN.md §12),
+ * so /credits states their source once, in its first paragraph, rather than
+ * per plate. When a plate is replaced with a photograph (docs/SHOTLIST.md,
+ * "Temporary plates"), give it its own entry, and show it on /credits.
  */
 
 export type Credit = {

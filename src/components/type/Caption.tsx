@@ -8,6 +8,9 @@ type CaptionProps = {
   /** The edge the text itself meets: the title's capitals at the top, or
    *  the details' baseline at the bottom (globals.css, optical alignment). */
   trim?: "top" | "bottom";
+  /** Set over a photograph: title and details in white (§2), as in the
+   *  fullscreen moment. */
+  overPhotograph?: boolean;
   className?: string;
 };
 
@@ -15,13 +18,21 @@ type CaptionProps = {
  * A catalogue caption (docs/DESIGN.md §1): the title of the work in italic
  * serif, its details in small sans beneath.
  */
-export function Caption({ caption, as: Tag = "div", trim, className }: CaptionProps) {
+export function Caption({ caption, as: Tag = "div", trim, overPhotograph, className }: CaptionProps) {
   return (
-    <Tag className={className}>
+    <Tag className={[overPhotograph && "text-white", className].filter(Boolean).join(" ") || undefined}>
       <p className={trim === "top" ? "caption-title trim-cap" : "caption-title"}>
         {caption.title}
       </p>
-      <p className={trim === "bottom" ? "meta trim-baseline text-fg-muted" : "meta text-fg-muted"}>
+      <p
+        className={[
+          "meta",
+          trim === "bottom" && "trim-baseline",
+          overPhotograph ? "text-white" : "text-fg-muted",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         {captionDetails(caption)}
       </p>
     </Tag>

@@ -5,7 +5,9 @@ import { plates, type Plate, type Ratio } from "./plates";
  * The five series of Selected work and their frame presets (docs/DESIGN.md
  * §6.04). The presets give the pinned story its rhythm: large, small,
  * quiet, large, unexpected. Columns refer to the 12-column desktop grid;
- * below 1024px every series stacks and the support photographs are omitted.
+ * below 1024px every series stacks and the support photographs are omitted:
+ * each main photograph spans the width at 4:5, never taller than 62svh, so
+ * on tablets its crop widens (focalMobile).
  */
 
 /** A photograph's frame on the desktop stage. */
@@ -33,6 +35,9 @@ export type Frame = {
   readonly height?: `${number}svh`;
   /** The crop, as an object-position value, where the frame cuts the photograph. */
   readonly focal?: string;
+  /** The crop below 1024px, where the stacked series cuts its main
+   *  photograph to the width (SeriesStack). */
+  readonly focalMobile?: string;
 };
 
 export type Series = {
@@ -55,7 +60,13 @@ export const series: readonly Series[] = [
     // 4:5 across cols 6–10 is about 76svh on a 16:10 screen. Fixing it there
     // keeps After Dark (82svh) the taller one on 16:9 screens too, and,
     // centred, its edges are the stage's two lines (12svh in).
-    main: { plate: plates.p03, ratio: "4:5", cols: [6, 10], height: "76svh" },
+    main: {
+      plate: plates.p03,
+      ratio: "4:5",
+      cols: [6, 10],
+      height: "76svh",
+      focalMobile: "50% 30%",
+    },
     support: {
       plate: plates.p04,
       ratio: "3:2",
@@ -68,7 +79,7 @@ export const series: readonly Series[] = [
     slug: "between-streets",
     copy: betweenStreets,
     feel: "small",
-    main: { plate: plates.p05, ratio: "3:2", cols: [7, 11] },
+    main: { plate: plates.p05, ratio: "3:2", cols: [7, 11], focalMobile: "55% 50%" },
     support: {
       plate: plates.p06,
       ratio: "3:4",
@@ -81,14 +92,27 @@ export const series: readonly Series[] = [
     slug: "still-water",
     copy: stillWater,
     feel: "quiet",
-    main: { plate: plates.p07, ratio: "16:9", cols: [6, 12], bleedsRight: true },
+    main: {
+      plate: plates.p07,
+      ratio: "16:9",
+      cols: [6, 12],
+      bleedsRight: true,
+      focalMobile: "33% 50%",
+    },
     support: null,
   },
   {
     slug: "after-dark",
     copy: afterDark,
     feel: "large",
-    main: { plate: plates.p08, ratio: "4:5", cols: [7, 11], height: "82svh", focal: "60% 50%" },
+    main: {
+      plate: plates.p08,
+      ratio: "4:5",
+      cols: [7, 11],
+      height: "82svh",
+      focal: "60% 50%",
+      focalMobile: "50% 20%",
+    },
     support: {
       plate: plates.p09,
       ratio: "3:2",
@@ -110,6 +134,7 @@ export const series: readonly Series[] = [
       cols: [10, 11],
       placement: "lower",
       focal: "60% 50%",
+      focalMobile: "50% 60%",
     },
     support: { plate: plates.p11, ratio: "3:2", cols: [4, 8] },
   },
