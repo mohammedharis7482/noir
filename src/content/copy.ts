@@ -1,7 +1,8 @@
 /*
  * Every word on the site, from docs/DESIGN.md §11. Components never hard-code
- * copy; they read it from here. Captions marked placeholder must be rewritten
- * to match the real photographs once they are curated.
+ * copy; they read it from here. Captions describe the photographs now in
+ * public/images/plates; when a temporary plate is replaced (docs/SHOTLIST.md),
+ * rewrite its caption to match the new photograph.
  */
 
 export type Category =
@@ -33,7 +34,6 @@ export const copy = {
   hero: {
     headline: ["Every frame", "holds a story."],
     meta: ["NOIR / 001", "Contemporary photography"],
-    // Placeholder caption.
     caption: {
       title: "Monsoon window",
       category: "Portrait",
@@ -48,7 +48,6 @@ export const copy = {
   },
 
   featured: {
-    // Placeholder caption.
     caption: {
       title: "Low tide",
       category: "Landscape",
@@ -77,23 +76,20 @@ export const copy = {
   visualStories: {
     title: "Visual stories",
     description: "Portrait, editorial, fashion, architecture and documentary work, 2024–2026.",
-    // Placeholder captions in strip order (p12–p19). The real ones are written
-    // after curation, as Title, Category / Place / Year; until then only the
-    // category from docs/SHOTLIST.md is known.
+    // In strip order, p12–p19.
     captions: [
-      { title: "Title", category: "Portrait" },
-      { title: "Title", category: "Editorial" },
-      { title: "Title", category: "Fashion" },
-      { title: "Title", category: "Architecture" },
-      { title: "Title", category: "Documentary" },
-      { title: "Title", category: "Portrait" },
-      { title: "Title", category: "Architecture" },
-      { title: "Title", category: "Documentary" },
+      { title: "Blue doorway", category: "Portrait", place: "Jodhpur", year: 2025 },
+      { title: "First catch", category: "Editorial", place: "Chennai", year: 2025 },
+      { title: "Kasavu", category: "Fashion", place: "Fort Kochi", year: 2026 },
+      { title: "Four o’clock", category: "Architecture", place: "Ahmedabad", year: 2024 },
+      { title: "Evening haul", category: "Documentary", place: "Kollam", year: 2024 },
+      { title: "Green shawl", category: "Portrait", place: "Thrissur", year: 2025 },
+      { title: "Brise-soleil", category: "Architecture", place: "Chandigarh", year: 2024 },
+      { title: "Looking up", category: "Documentary", place: "Howrah", year: 2026 },
     ] satisfies readonly Caption[],
   },
 
   fullscreen: {
-    // Placeholder caption.
     caption: {
       title: "Before the rain",
       category: "Landscape",

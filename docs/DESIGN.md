@@ -506,20 +506,20 @@ Copy
 
 ## 11. Copy
 
-All copy lives in `src/content/copy.ts`. Captions marked *placeholder* must be rewritten to match the real photographs once they are curated.
+All copy lives in `src/content/copy.ts`. Captions describe the current plates; when a temporary plate is replaced (`SHOTLIST.md`, “Temporary plates”), its caption is rewritten to match the new photograph.
 
 **Navigation:** `NOIR`, `Photography / Visual stories`, `Menu`
 
 **Hero**
 - Headline (h1), with the line break: `Every frame` / `holds a story.`
 - Metadata: `NOIR / 001`, `Contemporary photography`
-- Caption *(placeholder)*: *Monsoon window*, `Portrait / Palakkad / 2026`
+- Caption: *Monsoon window*, `Portrait / Palakkad / 2026`
 
 **Intro**
 - `I photograph light, movement, people and places, and the quiet in between.`
 - Metadata: `Five series`, `2024–2026`
 
-**Featured caption** *(placeholder)*: *Low tide*, `Landscape / Alappuzha / 2026`
+**Featured caption:** *Low tide*, `Landscape / Alappuzha / 2026`
 
 **Selected work**
 - Title: `Selected work`, `2024–2026`
@@ -536,9 +536,17 @@ All copy lives in `src/content/copy.ts`. Captions marked *placeholder* must be r
 **Visual stories**
 - `Visual stories`
 - `Portrait, editorial, fashion, architecture and documentary work, 2024–2026.`
-- Strip captions *(placeholder)*: written after curation, format *Title*, `Category / Place / Year`.
+- Strip captions, p12–p19 in strip order:
+  - *Blue doorway*, `Portrait / Jodhpur / 2025`
+  - *First catch*, `Editorial / Chennai / 2025`
+  - *Kasavu*, `Fashion / Fort Kochi / 2026`
+  - *Four o’clock*, `Architecture / Ahmedabad / 2024`
+  - *Evening haul*, `Documentary / Kollam / 2024`
+  - *Green shawl*, `Portrait / Thrissur / 2025`
+  - *Brise-soleil*, `Architecture / Chandigarh / 2024`
+  - *Looking up*, `Documentary / Howrah / 2026`
 
-**Fullscreen caption** *(placeholder)*: *Before the rain*, `Landscape / Kumbalangi / 2026`
+**Fullscreen caption:** *Before the rain*, `Landscape / Kumbalangi / 2026`
 
 **About**
 - `NOIR is the working name of an independent photographer based in Kerala. For ten years I have photographed people, streets and coastlines across India, on assignment for editorial clients and, more slowly, for myself. I work in natural light, usually with one camera and one lens, and I am more interested in what happens just before and just after a picture than in the picture itself.`
@@ -573,3 +581,4 @@ All copy lives in `src/content/copy.ts`. Captions marked *placeholder* must be r
 | 9 | Rules limited to two places; radius 0 everywhere | Avoid a broadsheet-template look; the brief bans rounded containers |
 | 10 | Instrument Serif and Hanken Grotesk | The brief left fonts open; both are free and distinctive at their roles |
 | 11 | Footer: no Instagram or Behance links; `Designed and built by Mohammed Haris` (to GitHub) and `Photo credits` (to `/credits`) take their place | NOIR is fictional, so social profiles would lead nowhere; the footer credits the person who built the site and the photographers whose work it shows |
+| 12 | The photographs are AI-generated (ChatGPT) stand-ins. Every plate’s source in `credits.ts` is “Generated with AI (ChatGPT)”, and `/credits` will say so | There is no photographer to credit, and the credits page should say plainly how the images were made. `SHOTLIST.md` lists the plates that must be replaced before the site is shown publicly |

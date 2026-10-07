@@ -4,8 +4,9 @@ import { plateFiles } from "./plate-files";
 /*
  * The 21 photographs (docs/SHOTLIST.md). Each file lives in
  * public/images/plates under the name below; a missing file renders as the
- * NoirImage placeholder. Alt text and captions are placeholders until the
- * photographs are curated: rewrite them to describe the photograph chosen.
+ * NoirImage placeholder. Most plates are temporary (docs/SHOTLIST.md,
+ * "Temporary plates"): when one is replaced, rewrite its alt text to
+ * describe the new photograph.
  */
 
 /** URL path of public/images/plates. */
@@ -64,7 +65,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p01-hero.jpg",
     role: "hero",
     ratio: "3:2", // 4:5 on mobile, set by the composition
-    alt: "A person standing in a doorway in soft monsoon light, looking away from the camera",
+    alt: "A young man in a dark shirt leans against a tall window, looking out through rain-streaked glass at misty hills and palm trees",
     caption: copy.hero.caption,
   },
   p02: {
@@ -72,7 +73,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p02-featured.jpg",
     role: "featured",
     ratio: "3:2",
-    alt: "A wide, hazy shoreline at low tide with a few small boats far out on the water",
+    alt: "Four figures stand by a small boat far out on wet sand at low tide, under a hazy sun with palms along the horizon",
     caption: copy.featured.caption,
   },
   p20: {
@@ -80,7 +81,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p20-fullscreen.jpg",
     role: "fullscreen",
     ratio: "16:9", // 4:5 on mobile, set by the composition
-    alt: "A lone figure in a wide, flat landscape under a heavy sky before rain",
+    alt: "A lone man poles a narrow canoe across wide, still backwaters under a dark storm sky, with palms along the far shore",
     caption: copy.fullscreen.caption,
   },
 
@@ -90,7 +91,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p03-morning-light.jpg",
     role: "series-main",
     ratio: "4:5",
-    alt: "A portrait lit by low, warm morning light falling from one side",
+    alt: "An older woman with grey hair, in a cream saree, sits in warm side light against a dark room, gazing to one side",
     caption: morningLight,
   },
   p04: {
@@ -98,7 +99,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p04-morning-light-detail.jpg",
     role: "series-support",
     ratio: "3:2",
-    alt: "Morning light falling across folded hands and the fabric of a sleeve",
+    alt: "Close-up of weathered hands with a thin gold bangle folding a white cloth on a wooden table in warm light",
     caption: morningLight,
   },
   p05: {
@@ -106,7 +107,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p05-between-streets.jpg",
     role: "series-main",
     ratio: "3:2",
-    alt: "A crowded street in layers, people moving past shopfronts and traffic",
+    alt: "A crowded street of old colonial buildings at sunset, with a domed tower in the distance, a man pushing a handcart and a red bus passing in a blur",
     caption: betweenStreets,
   },
   p06: {
@@ -114,7 +115,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p06-between-streets-detail.jpg",
     role: "series-support",
     ratio: "3:4",
-    alt: "A long shadow stretching across a narrow doorway",
+    alt: "A man on a stool drinks tea at a blue roadside stall in morning sun, while another man walks past and a blurred figure crosses the foreground",
     caption: betweenStreets,
   },
   p07: {
@@ -122,7 +123,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p07-still-water.jpg",
     role: "series-main",
     ratio: "16:9",
-    alt: "Calm backwaters under a low horizon, almost without colour",
+    alt: "In black and white, four figures stand by a small boat far out on wet sand at low tide, under a low sun",
     caption: stillWater,
   },
   p08: {
@@ -130,7 +131,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p08-after-dark.jpg",
     role: "series-main",
     ratio: "4:5",
-    alt: "A portrait at night, lit by the warm light of a shop sign",
+    alt: "A young woman in a dark dress stands on a street at night beside a lit shop window, her face warm in its light",
     caption: afterDark,
   },
   p09: {
@@ -138,7 +139,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p09-after-dark-detail.jpg",
     role: "series-support",
     ratio: "3:2",
-    alt: "Lit signage reflected in a wet road at night",
+    alt: "A wet street at night, with two lit windows in an old building and a street lamp reflected on the asphalt",
     caption: afterDark,
   },
   p10: {
@@ -146,7 +147,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p10-quiet-forms.jpg",
     role: "series-main",
     ratio: "2:3",
-    alt: "A concrete stair climbing into deep shadow",
+    alt: "A bare concrete wall in raking light beside a narrow stair whose thin handrail climbs into shadow",
     caption: quietForms,
   },
   p11: {
@@ -154,7 +155,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p11-quiet-forms-wide.jpg",
     role: "series-support",
     ratio: "3:2",
-    alt: "A concrete building with strong repeating geometry, seen from across a street",
+    alt: "A long concrete building with tall vertical fins under a pale sky, with a single person walking past its base",
     caption: quietForms,
   },
 
@@ -164,7 +165,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p12-portrait.jpg",
     role: "strip",
     ratio: "3:4",
-    alt: "A person standing in their workshop among the tools of their trade",
+    alt: "A bearded man in a cream head wrap leans in the blue doorway of a market stall, looking out to one side, with baskets hanging behind him",
     caption: strip[0],
   },
   p13: {
@@ -172,7 +173,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p13-editorial.jpg",
     role: "strip",
     ratio: "3:2",
-    alt: "A market at opening time, the first stalls being set out",
+    alt: "Workers sort fish into plastic crates under the tin roof of a harbour market at sunrise, with a ship hazy in the distance",
     caption: strip[1],
   },
   p14: {
@@ -180,7 +181,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p14-fashion.jpg",
     role: "strip",
     ratio: "2:3",
-    alt: "A model in a long dress walking down a sunlit street",
+    alt: "A young woman in a sheer cream saree stands by a weathered stone wall beneath palm trees, looking away to one side",
     caption: strip[2],
   },
   p15: {
@@ -188,7 +189,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p15-architecture.jpg",
     role: "strip",
     ratio: "4:5",
-    alt: "An empty interior crossed by bands of sunlight and shadow",
+    alt: "Sunlight falls in diagonal bands across bare concrete walls and a stair, with a low dark bench in the foreground",
     caption: strip[3],
   },
   p16: {
@@ -196,7 +197,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p16-documentary.jpg",
     role: "strip",
     ratio: "3:2",
-    alt: "Fishermen hauling a net up the beach in early light",
+    alt: "Six fishermen in silhouette haul a net from a wooden boat at sunset, the sun low over the water behind them",
     caption: strip[4],
   },
   p17: {
@@ -204,7 +205,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p17-portrait.jpg",
     role: "strip",
     ratio: "4:5",
-    alt: "A close, quiet portrait in soft window light",
+    alt: "A young woman with her hair tied back looks down in soft side light, a dark green shawl around her shoulders",
     caption: strip[5],
   },
   p18: {
@@ -212,7 +213,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p18-architecture.jpg",
     role: "strip",
     ratio: "16:9",
-    alt: "A long facade built from one repeating window pattern",
+    alt: "Tall concrete fins line the facade of a modern building against a clear blue sky, with a small tree in front",
     caption: strip[6],
   },
   p19: {
@@ -220,7 +221,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p19-documentary.jpg",
     role: "strip",
     ratio: "3:4",
-    alt: "Two people sharing a quiet moment on a crowded station platform",
+    alt: "A schoolboy with a backpack looks up on a busy railway platform, a red and cream train standing behind him",
     caption: strip[7],
   },
 
@@ -230,7 +231,7 @@ export const plates: { readonly [Id in PlateId]: Plate<Id> } = {
     file: "p21-about.jpg",
     role: "about",
     ratio: "3:4",
-    alt: "A photographer seen from behind, holding a camera at their side",
+    alt: "A man seen from behind stands on a wet beach at dusk with a camera in one hand, facing the waves",
   },
 };
 
