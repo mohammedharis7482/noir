@@ -37,8 +37,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <SkipLink />
         <SmoothScroll>{children}</SmoothScroll>
-        {/* The grid overlay is a dev tool; /specimen also renders it in production. */}
-        {process.env.NODE_ENV === "development" && <GridOverlay />}
+        {/* Dev tool: GridOverlay decides which pages respond to the g key. */}
+        <GridOverlay />
       </body>
     </html>
   );

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { GridOverlay } from "@/components/layout/GridOverlay";
 import { CONTENT_ID } from "@/components/layout/SkipLink";
 import { copy } from "@/content/copy";
 import { GridReadout } from "./_components/GridReadout";
@@ -48,9 +47,6 @@ export default function SpecimenPage() {
           <SyncTest />
         </SpecimenSection>
       </main>
-
-      {/* The root layout renders the overlay in development. */}
-      {process.env.NODE_ENV !== "development" && <GridOverlay />}
     </>
   );
 }
