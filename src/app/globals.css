@@ -205,6 +205,13 @@
     }
   }
 
+  /* §6.04 Selected work: the stage's type (index, counter, title) sits on
+     the lines of Morning Light's main photograph, 76svh tall and centred,
+     so 12svh in from the stage's top and bottom edges. */
+  .series-stage {
+    --stage-inset: 12svh;
+  }
+
   /* §9 The skip link comes first in the page and shows only on focus. */
   .skip-link {
     position: fixed;
@@ -251,6 +258,26 @@
     (100% - (var(--page-columns) - 1) * var(--spacing-gutter)) / var(--page-columns) +
       var(--spacing-gutter)
   );
+}
+
+/* N columns and their gutters, for a block inside an element that spans
+   the whole page grid: the editorial statement's second line. */
+@utility indent-cols-* {
+  margin-inline-start: calc(
+    ((100% - (var(--page-columns) - 1) * var(--spacing-gutter)) / var(--page-columns) +
+        var(--spacing-gutter)) *
+      --value(integer)
+  );
+}
+
+/* A scroll container without a visible scrollbar, where the design shows
+   progress another way (the Visual stories progress rule, §6.06). */
+@utility scrollbar-hidden {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* §3 Optical alignment. Each type role records how far its capitals and its
