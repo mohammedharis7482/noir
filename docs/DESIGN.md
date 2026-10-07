@@ -393,11 +393,12 @@ cols  1    2    3    4    5    6    7    8    9    10   11   12
 Theme dark. 12vh top; the page margin at the bottom.
 
 ```
-|  © 2026 NOIR                     Instagram   Behance                Back to top  |
+|  © 2026 NOIR         Designed and built by Mohammed Haris    Photo credits         Back to top  |
 ```
 
 - One row in `meta`, `fg-muted`. Links are `fg` on hover.
-- No giant wordmark, no local-time clock, no coordinates.
+- `Designed and built by Mohammed Haris` links to https://github.com/mohammedharis7482. `Photo credits` links to `/credits`, the page listing every plate's photographer and source from `src/content/credits.ts`.
+- No social links (NOIR is fictional), no giant wordmark, no local-time clock, no coordinates.
 
 ---
 
@@ -553,7 +554,7 @@ All copy lives in `src/content/copy.ts`. Captions marked *placeholder* must be r
 - `hello@noir.studio`
 - `Start a project →` (links to `mailto:hello@noir.studio?subject=New%20project`)
 
-**Footer:** `© 2026 NOIR`, `Instagram`, `Behance`, `Back to top`
+**Footer:** `© 2026 NOIR`, `Designed and built by Mohammed Haris` (links to https://github.com/mohammedharis7482), `Photo credits` (links to `/credits`), `Back to top`
 
 ---
 
@@ -571,3 +572,4 @@ All copy lives in `src/content/copy.ts`. Captions marked *placeholder* must be r
 | 8 | Signature moment: paper to darkroom; sections 08–11 are dark | One bold idea, specific to the name NOIR |
 | 9 | Rules limited to two places; radius 0 everywhere | Avoid a broadsheet-template look; the brief bans rounded containers |
 | 10 | Instrument Serif and Hanken Grotesk | The brief left fonts open; both are free and distinctive at their roles |
+| 11 | Footer: no Instagram or Behance links; `Designed and built by Mohammed Haris` (to GitHub) and `Photo credits` (to `/credits`) take their place | NOIR is fictional, so social profiles would lead nowhere; the footer credits the person who built the site and the photographers whose work it shows |

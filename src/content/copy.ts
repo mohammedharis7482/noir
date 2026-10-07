@@ -129,7 +129,14 @@ export const copy = {
 
   footer: {
     copyright: "© 2026 NOIR",
-    social: ["Instagram", "Behance"],
+    builtBy: {
+      label: "Designed and built by Mohammed Haris",
+      href: "https://github.com/mohammedharis7482",
+    },
+    photoCredits: {
+      label: "Photo credits",
+      href: "/credits",
+    },
     backToTop: "Back to top",
   },
 
