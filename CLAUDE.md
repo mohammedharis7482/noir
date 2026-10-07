@@ -106,14 +106,16 @@ src/
 
 ## Status
 
-- Current phase: 2a, Navigation, Hero, Intro and Featured, with the photo intake (done, awaiting review). Phase 2b needs approval.
+- Current phase: 2b, Selected work, Editorial statement and Visual stories (done, awaiting review). Phase 2c needs approval.
 - Done by hand before Phase 1: create-next-app 16.3.8 (`--empty`, `--agents-md`, App Router, TypeScript, Tailwind CSS, ESLint, `src/`, `@/*`); Node 22 pinned; gsap 3.15.0, @gsap/react 2.1.2 and lenis 1.3.26 installed; docs added; repository on GitHub with Vercel previews.
-- Completed phases: 1, Foundation (branch `phase-01-foundation`); 2a, with the photo intake (branch `photos-intake`)
+- Completed phases: 1, Foundation (branch `phase-01-foundation`); 2a, with the photo intake (branch `photos-intake`); 2b (branch `phase-02b-middle`)
 - Photographs: all 21 plates are in `public/images/plates`, generated with AI as stand-ins. The temporary plates listed in `docs/SHOTLIST.md` must be replaced, under the same file names, before launch.
 - Open questions:
   - `/credits` (Phase 2c) has no composition in `DESIGN.md` §6 yet; propose one at the start of Phase 2c.
-  - `DESIGN.md` §4 rule 3 says every major section has one element that bleeds off an edge, but on desktop Intro (§6.02) and Featured (§6.03) have none.
+  - §6.05's wireframe sets line 2 of the editorial statement at col 4 and the supporting line at col 8; the text says col 5 and cols 7–11. Phase 2b follows the text.
+  - Below 1024px each Selected work series is 4:5 across the full width (§6.04), which is about 94svh on a 768×1024 tablet. Cap it as the tablet hero was (§12, row 16)?
 - Decided after Phase 1 review: the home page has no h1 until the hero exists (Phase 2); AVIF waits for Phase 9; the CTA arrow is a Phase 8 task.
+- Decided after Phase 2a review (`DESIGN.md` §12, rows 15–18): §4 rule 3 applies to the image-led signature sections only; the tablet hero at 62svh and the 16:9 hero photograph at about 1.9:1 are accepted, with the headline at 14svh; the p12–p19 captions stand while those plates are temporary.
 
 ## Implementation notes
 
@@ -131,3 +133,6 @@ Add dated notes here about implementation decisions. Design decisions belong in 
 - 2026-10-07: The plates were cropped, enlarged (p01, p02, p20, 2x with EDSR) and exported with Pillow and OpenCV in a temporary Python environment outside the project; nothing was added to `package.json`. Next's image optimizer caches resized images for at least 4 hours and cannot invalidate them, so after replacing a plate under the same file name, delete `.next/cache/images` locally (during 2a a stale test image from an earlier session showed up at one width).
 - 2026-10-07: The navigation is laid over the top 64px of the page (`absolute`, `h-nav`), so the hero's 100svh includes the band. The home page renders it; Phase 8 makes it fixed, and `/credits` (2c) will need it too, so it may move into a shared layout then.
 - 2026-10-07: The hero's sizes live in `globals.css` (`.hero`): `display-xl` reads `--display-xl-size`, which only the hero sets, and the photograph's height is `--hero-photo`. Every type role records `--cap-inset` and `--baseline-inset` from the font metrics; `trim-cap` and `trim-baseline` pull a line box in so the capitals or the baseline, not the box, meet an edge. For text against text, use grid baseline alignment (`items-baseline-last`). `bleed-right` reaches the viewport edge from inside the page grid; `indent-column` indents by one column and its gutter.
+- 2026-10-07: Selected work renders both versions and hides one per breakpoint: `SeriesStory` (desktop, client) and `SeriesStack` (below 1024px, server). Lazy images inside the hidden version never load. `SeriesStory` holds every stage's layers (`StageLayers`: root, index, counter, main, support, title) through `useImperativeHandle`, for Phase 5's pinned stage; the stacked stages stay as its reduced-motion fallback. Index rows scroll with `lenis.scrollTo`, or `scrollIntoView` when Lenis is off, and move focus to the stage.
+- 2026-10-07: On each 100svh stage the type sits on two lines, `--stage-inset` (12svh) in from the top and bottom, and the photographs' placements in `series.ts` hang from the same lines (high, lower, overlapping), so alignments hold on every screen shape. Frames are direct items of the stage grid, all in row 1: auto-placement would move a frame that starts left of the previous one into a second row. Morning Light's main photograph is fixed at 76svh so After Dark (82svh) stays the taller one on 16:9 screens.
+- 2026-10-07: Visual stories reads heights, alignments and gaps from `src/content/strip.ts`; heights stop at 66svh so the tallest photograph and its caption fit above the progress rule at 1280×720. The strip is a native scroll container for now (`role="region"`, labelled by its heading, `tabIndex={0}`, scrollbar hidden on desktop, `scroll-snap-type: x proximity` below 1024px); the progress rule and counter are static until Phase 6. `indent-cols-*` indents by N columns and gutters. At `display-l`, italic descenders reach 0.215em, so series titles keep 8px above their details.

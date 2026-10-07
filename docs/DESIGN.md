@@ -104,7 +104,7 @@ Composition rules
 
 1. Images span 3, 5, 7 or 9 columns by default. Two equal-width images side by side are not allowed.
 2. Image blocks are never centred on the page. The fullscreen moment is the only exception.
-3. Every major section has one element that bleeds off a viewport edge.
+3. Each image-led signature section (Hero, Selected work, Visual stories and the Fullscreen moment) has one element that bleeds off a viewport edge. The quieter sections between them (Intro, Featured, Editorial and the darkroom sections) don't need one (§12, row 15).
 4. Neighbouring images sit at different heights. Never align a row of image tops.
 5. Captions align to an image edge, left or right, never centred under an image.
 6. One focal element per viewport. If two things compete, shrink one.
@@ -584,3 +584,7 @@ All copy lives in `src/content/copy.ts`. Captions describe the current plates; w
 | 12 | The photographs are AI-generated (ChatGPT) stand-ins. Every plate’s source in `credits.ts` is “Generated with AI (ChatGPT)”, and `/credits` will say so | There is no photographer to credit, and the credits page should say plainly how the images were made. `SHOTLIST.md` lists the plates that must be replaced before the site is shown publicly |
 | 13 | Hero: the photograph's top edge is the bottom of the 64px navigation band, and it bleeds off the right edge only; on mobile it sits directly below the navigation | §6.01 contradicted itself: the photograph bled off the top, but the metadata aligned with its visible top, and a top bleed would have put Menu over the photograph |
 | 14 | Hero: the headline's size answers to the viewport's height as well as its width (`min(10vw, 14svh)` between 3.5rem and 12rem; `min(14vw, 14svh)` below 1024px), and the photograph takes the height left above it, between 52svh and 62svh | At 1440×800 two lines of `display-xl` at 10vw need about 260px, but a 62svh photograph leaves about 190px. Shrinking the type alone would bring the headline down to about 83px, smaller than the intro statement, so the photograph gives way too: at 14svh the headline stays about 1.3 times `display-l`, and the photograph is 54–59svh on common laptop and desktop screens |
+| 15 | §4 rule 3 (an element that bleeds off an edge) applies to the image-led signature sections: Hero, Selected work, Visual stories and the Fullscreen moment. Intro and Featured keep the compositions in §6.02 and §6.03 | The rule contradicted §6.02 and §6.03, which have no bleeding element on desktop. The quieter sections read as wall space between the signature sections, and the bleeds carry more weight where they are fewer |
+| 16 | Hero on tablets (640–1023px): the photograph spans the width at no more than 62svh, about 1.2:1 at 768×1024, rather than 4:5 | Accepted after the Phase 2a review. 4:5 across a tablet's width would be about 94svh and push the headline off the first screen |
+| 17 | Hero on 16:9 laptop screens: the photograph reads at about 1.9:1 rather than 3:2, and the headline stays at 14svh | Accepted after the Phase 2a review. A taller photograph would need a smaller headline, and 14svh keeps the headline clearly larger than the intro statement |
+| 18 | The strip captions for p12–p19 (§11) stand while those plates are temporary; each is rewritten when its plate is replaced | Accepted after the Phase 2a review |
