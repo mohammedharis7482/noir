@@ -28,7 +28,10 @@ A fictional photography portfolio designed as an exhibition catalogue: photograp
 ## Phases
 
 1. Foundation: tokens, fonts, smooth scroll, GSAP setup, `NoirImage`, content models, specimen page. The scaffold and dependencies are already in place.
-2. Static composition: every section built from `DESIGN.md` §6 with no motion, desktop and mobile, plus the `/credits` page the footer links to (needs the photographs)
+2. Static composition: every section built from `DESIGN.md` §6 with no motion, desktop and mobile, in three parts:
+   - 2a: Navigation, Hero, Intro, Featured
+   - 2b: Selected work, Editorial statement, Visual stories
+   - 2c: Fullscreen, About, Marquee, Contact, Footer, and the `/credits` page the footer links to
 3. Hero motion: load sequence and camera push
 4. Typography motion: Intro, Editorial, Contact, About
 5. Selected work: the pinned page-turn story
@@ -103,11 +106,13 @@ src/
 
 ## Status
 
-- Current phase: 1, Foundation (done, awaiting review). Phase 2 needs approval and the 21 photographs.
+- Current phase: 2a, Navigation, Hero, Intro and Featured, with the photo intake (done, awaiting review). Phase 2b needs approval.
 - Done by hand before Phase 1: create-next-app 16.3.8 (`--empty`, `--agents-md`, App Router, TypeScript, Tailwind CSS, ESLint, `src/`, `@/*`); Node 22 pinned; gsap 3.15.0, @gsap/react 2.1.2 and lenis 1.3.26 installed; docs added; repository on GitHub with Vercel previews.
-- Completed phases: 1, Foundation (branch `phase-01-foundation`)
+- Completed phases: 1, Foundation (branch `phase-01-foundation`); 2a, with the photo intake (branch `photos-intake`)
+- Photographs: all 21 plates are in `public/images/plates`, generated with AI as stand-ins. The temporary plates listed in `docs/SHOTLIST.md` must be replaced, under the same file names, before launch.
 - Open questions:
-  - `/credits` (Phase 2) has no composition in `DESIGN.md` §6 yet; propose one at the start of Phase 2.
+  - `/credits` (Phase 2c) has no composition in `DESIGN.md` §6 yet; propose one at the start of Phase 2c.
+  - `DESIGN.md` §4 rule 3 says every major section has one element that bleeds off an edge, but on desktop Intro (§6.02) and Featured (§6.03) have none.
 - Decided after Phase 1 review: the home page has no h1 until the hero exists (Phase 2); AVIF waits for Phase 9; the CTA arrow is a Phase 8 task.
 
 ## Implementation notes
@@ -123,3 +128,6 @@ Add dated notes here about implementation decisions. Design decisions belong in 
 - 2026-10-07: `NoirImage` never touches the file system, so it renders the same in server and client components. `scripts/plate-manifest.mjs` lists `public/images/plates` into `src/content/plate-files.ts` (committed; `npm run dev`, `npm run build` and `npm run plates` rewrite it), and `hasPlateFile()` in `plates.ts` reads it. A manifest rather than props: no section has to thread an availability flag down to every image, and the server render and the browser read the same data, so hydration always agrees. With the dev server running, run `npm run plates` after adding photographs. `ClientImageSample` on /specimen renders `NoirImage` inside a client component as a standing test.
 - 2026-10-07: The matchMedia conditions use range syntax (`width >= 1024px`, `width < 1024px`), so no fractional width falls between desktop and mobile.
 - 2026-10-07: The grid overlay is mounted once, in the root layout. It responds to `g` on every page in development and Vercel previews (`NEXT_PUBLIC_VERCEL_ENV === "preview"`), and only on /specimen in production.
+- 2026-10-07: The plates were cropped, enlarged (p01, p02, p20, 2x with EDSR) and exported with Pillow and OpenCV in a temporary Python environment outside the project; nothing was added to `package.json`. Next's image optimizer caches resized images for at least 4 hours and cannot invalidate them, so after replacing a plate under the same file name, delete `.next/cache/images` locally (during 2a a stale test image from an earlier session showed up at one width).
+- 2026-10-07: The navigation is laid over the top 64px of the page (`absolute`, `h-nav`), so the hero's 100svh includes the band. The home page renders it; Phase 8 makes it fixed, and `/credits` (2c) will need it too, so it may move into a shared layout then.
+- 2026-10-07: The hero's sizes live in `globals.css` (`.hero`): `display-xl` reads `--display-xl-size`, which only the hero sets, and the photograph's height is `--hero-photo`. Every type role records `--cap-inset` and `--baseline-inset` from the font metrics; `trim-cap` and `trim-baseline` pull a line box in so the capitals or the baseline, not the box, meet an edge. For text against text, use grid baseline alignment (`items-baseline-last`). `bleed-right` reaches the viewport edge from inside the page grid; `indent-column` indents by one column and its gutter.

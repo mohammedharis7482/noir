@@ -76,6 +76,10 @@
   --page-columns: 4;
   --page-max: 2400px; /* above this the grid stops growing and centres */
 
+  /* §6.00 The navigation band, 64px: h-nav. The hero's photograph starts at
+     its bottom edge. */
+  --spacing-nav: 4rem;
+
   /* §8 Breakpoints, in px to match the matchMedia conditions in src/lib/motion.ts. */
   --breakpoint-*: initial;
   --breakpoint-sm: 640px; /* tablet */
@@ -176,6 +180,31 @@
 }
 
 @layer components {
+  /* §6.01 Hero (DESIGN.md §6.01 and §12). The headline answers to the
+     viewport's height as well as its width, and on desktop the photograph
+     takes the height left above the headline, between 52svh and 62svh. */
+  .hero {
+    --display-xl-size: min(14vw, 14svh);
+    --hero-photo: min(125vw, 62svh); /* 4:5 across the width, at most 62svh */
+    --hero-gap: var(--spacing-8); /* the least space above the headline */
+    --hero-descender: 0.1em; /* the y of "story" hangs 0.095em below the line */
+
+    @variant lg {
+      --display-xl-size: clamp(3.5rem, min(10vw, 14svh), 12rem);
+      /* The viewport less the band, the gap, the headline (two lines at
+         line height 0.9 plus the descender: 1.9em) and the bottom margin. */
+      --hero-photo: clamp(
+        52svh,
+        100svh - var(--spacing-nav) - var(--hero-gap) - 1.9 * var(--display-xl-size) -
+          var(--spacing-margin),
+        62svh
+      );
+      /* The caption's capitals line up with the headline's, which start
+         0.07em into display-xl's first line. */
+      --hero-caption-offset: calc(var(--hero-gap) + 0.07 * var(--display-xl-size));
+    }
+  }
+
   /* §9 The skip link comes first in the page and shows only on focus. */
   .skip-link {
     position: fixed;
@@ -209,16 +238,48 @@
   padding-inline: var(--spacing-margin);
 }
 
+/* §4 rule 3: bleeds off the right edge of the viewport from inside the
+   page grid, past the margin and, above --page-max, past the centring. */
+@utility bleed-right {
+  margin-inline-end: calc(-1 * (var(--spacing-margin) + max(0px, (100vw - var(--page-max)) / 2)));
+}
+
+/* One column and its gutter, for a block inside an element that spans the
+   whole page grid: the hero headline's second line. */
+@utility indent-column {
+  margin-inline-start: calc(
+    (100% - (var(--page-columns) - 1) * var(--spacing-gutter)) / var(--page-columns) +
+      var(--spacing-gutter)
+  );
+}
+
+/* §3 Optical alignment. Each type role records how far its capitals and its
+   baseline sit inside its line box, from the font metrics (Instrument
+   Serif: ascent 0.99, descent 0.31, cap height 0.72; Hanken Grotesk: 1,
+   0.303, 0.697). For line height L, ascent A, descent D and cap height C:
+   --cap-inset = (L + A - D) / 2 - C and --baseline-inset = (L - A + D) / 2.
+   trim-cap and trim-baseline pull the line box in by that much, so the
+   capitals or the baseline, not the line box, meet an edge. */
+@utility trim-cap {
+  margin-block-start: calc(-1 * var(--cap-inset, 0px));
+}
+
+@utility trim-baseline {
+  margin-block-end: calc(-1 * var(--baseline-inset, 0px));
+}
+
 /* §3 Type roles. Display roles balance their lines and shift left by
    0.05em so the stems, not the side bearings, sit on the grid edge. */
 @utility display-xl {
   font-family: --theme(--font-serif);
   font-weight: --theme(--font-weight-normal);
-  font-size: clamp(3.5rem, 10vw, 12rem);
+  font-size: var(--display-xl-size, clamp(3.5rem, 10vw, 12rem)); /* .hero sets its own */
   line-height: 0.9;
   letter-spacing: -0.02em;
   text-wrap: balance;
   margin-inline-start: -0.05em;
+  --cap-inset: 0.07em;
+  --baseline-inset: 0.11em;
 }
 
 @utility display-l {
@@ -229,6 +290,8 @@
   letter-spacing: -0.015em;
   text-wrap: balance;
   margin-inline-start: -0.05em;
+  --cap-inset: 0.11em;
+  --baseline-inset: 0.15em;
 }
 
 @utility display-m {
@@ -238,6 +301,8 @@
   line-height: 1.05;
   letter-spacing: -0.01em;
   text-wrap: balance;
+  --cap-inset: 0.145em;
+  --baseline-inset: 0.185em;
 }
 
 @utility text-l {
@@ -248,6 +313,8 @@
   letter-spacing: 0;
   text-wrap: pretty;
   max-inline-size: 34ch;
+  --cap-inset: 0.245em;
+  --baseline-inset: 0.285em;
 }
 
 /* Italic means the title of a work, and nothing else. */
@@ -259,6 +326,8 @@
   line-height: 1.2;
   letter-spacing: 0;
   text-wrap: pretty;
+  --cap-inset: 0.22em;
+  --baseline-inset: 0.26em;
 }
 
 @utility body {
@@ -269,6 +338,8 @@
   letter-spacing: 0;
   text-wrap: pretty;
   max-inline-size: 60ch;
+  --cap-inset: 0.427em;
+  --baseline-inset: 0.427em;
 }
 
 @utility meta {
@@ -278,6 +349,8 @@
   line-height: 1.4;
   letter-spacing: 0.01em;
   text-wrap: pretty;
+  --cap-inset: 0.352em;
+  --baseline-inset: 0.352em;
 }
 
 @utility ui {
@@ -286,6 +359,8 @@
   font-size: 0.8125rem; /* 13px */
   line-height: 1;
   letter-spacing: 0.02em;
+  --cap-inset: 0.152em;
+  --baseline-inset: 0.152em;
 }
 
 /* §6.00 The NOIR wordmark: the only all-caps word on the site. */
@@ -295,4 +370,6 @@
   font-size: 0.8125rem; /* 13px */
   line-height: 1;
   letter-spacing: 0.2em;
+  --cap-inset: 0.152em;
+  --baseline-inset: 0.152em;
 }
