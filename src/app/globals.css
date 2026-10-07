@@ -1,1 +1,298 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/*
+ * NOIR design tokens. Source of truth: docs/DESIGN.md (§2 colour, §3 type,
+ * §4 grid and space, §7 motion, §9 accessibility). Every value is defined
+ * once here; components use the utilities these tokens generate.
+ */
+
+/* §2 Colour. The palette is closed: Tailwind's default colours are removed. */
+@theme static {
+  --color-*: initial;
+
+  /* Paper context, sections 00–07 */
+  --color-paper: #F4F2ED;
+  --color-ink: #111111;
+  --color-ink-muted: #6B6761;
+  --color-rule: #D9D6D0;
+  --color-white: #FFFFFF; /* text over photographs only */
+
+  /* Darkroom context, sections 08–11 */
+  --color-dark: #111111;
+  --color-dark-ink: #F4F2ED;
+  --color-dark-muted: #8C877F;
+  --color-dark-rule: #2E2C29;
+
+  /* Semantic tokens: the colours components use. These are the paper
+     values; every [data-theme] element re-points them (base layer). */
+  --color-bg: var(--color-paper);
+  --color-fg: var(--color-ink);
+  --color-fg-muted: var(--color-ink-muted);
+  --color-line: var(--color-rule);
+}
+
+/* §3 Typefaces, loaded with next/font in src/app/layout.tsx. */
+@theme inline {
+  --font-*: initial;
+  --font-serif: var(--font-instrument-serif), serif;
+  --font-sans: var(--font-hanken-grotesk), sans-serif;
+}
+
+@theme {
+  /* §3 Hanken Grotesk at 400 and 500 only; never bold. */
+  --font-weight-*: initial;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+
+  /* §3 Sizes, line heights and tracking come only from the type roles below. */
+  --text-*: initial;
+  --leading-*: initial;
+  --tracking-*: initial;
+
+  /* §4 Space scale (px): 4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256.
+     Keys keep Tailwind's 4px steps, so p-4 is 16px and p-64 is 256px;
+     steps off the scale (p-5) do not exist. */
+  --spacing-*: initial;
+  --spacing-0: 0px;
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+  --spacing-24: 6rem;
+  --spacing-32: 8rem;
+  --spacing-48: 12rem;
+  --spacing-64: 16rem;
+
+  /* §4 Grid, below 640px: 4 columns, 1.25rem margin, 1rem gutter. Tablet
+     and desktop values are set in the base layer. Margin and gutter are
+     spacing tokens, so px-margin, gap-x-gutter and -mr-margin all work. */
+  --spacing-margin: 1.25rem;
+  --spacing-gutter: 1rem;
+  --page-columns: 4;
+  --page-max: 2400px; /* above this the grid stops growing and centres */
+
+  /* §8 Breakpoints, in px to match the matchMedia conditions in src/lib/motion.ts. */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 640px; /* tablet */
+  --breakpoint-lg: 1024px; /* desktop */
+
+  /* §7 Eases for CSS transitions (small hover and focus states only).
+     GSAP uses the same curves from src/lib/motion.ts. */
+  --ease-*: initial;
+  --ease-noir-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-noir-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --default-transition-duration: 450ms; /* duration.ui */
+  --default-transition-timing-function: var(--ease-noir-out);
+
+  /* §4 and §10: radius 0, no shadows, no blur, no CSS keyframe animation. */
+  --radius-*: initial;
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --text-shadow-*: initial;
+  --blur-*: initial;
+  --animate-*: initial;
+}
+
+/* §8 Hover effects only apply with a precise pointer. Tailwind's hover:
+   variant follows, so no component can opt out by accident. */
+@custom-variant hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
+@layer base {
+  /* §4 Grid: 8 columns from 640px, 12 from 1024px. */
+  :root {
+    @variant sm {
+      --page-columns: 8;
+      --spacing-margin: clamp(1.25rem, 3.5vw, 4rem);
+      --spacing-gutter: clamp(1rem, 1.5vw, 1.5rem);
+    }
+
+    @variant lg {
+      --page-columns: 12;
+    }
+  }
+
+  /* §2 Themes. Every section sets data-theme; the semantic tokens, the
+     background and the text colour follow it. */
+  [data-theme="paper"] {
+    --color-bg: var(--color-paper);
+    --color-fg: var(--color-ink);
+    --color-fg-muted: var(--color-ink-muted);
+    --color-line: var(--color-rule);
+    color-scheme: light;
+  }
+
+  [data-theme="dark"] {
+    --color-bg: var(--color-dark);
+    --color-fg: var(--color-dark-ink);
+    --color-fg-muted: var(--color-dark-muted);
+    --color-line: var(--color-dark-rule);
+    color-scheme: dark;
+  }
+
+  [data-theme] {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-synthesis: none;
+  }
+
+  body {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  ::selection {
+    background-color: var(--color-fg);
+    color: var(--color-bg);
+  }
+
+  /* §9 Focus: a 1px solid currentColor outline, 4px offset, on every
+     interactive element. */
+  :focus-visible {
+    outline: 1px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  /* Elements focused by script or by the skip link, not by the user. */
+  [tabindex="-1"]:focus {
+    outline: none;
+  }
+}
+
+@layer components {
+  /* §9 The skip link comes first in the page and shows only on focus. */
+  .skip-link {
+    position: fixed;
+    top: var(--spacing-4);
+    left: var(--spacing-margin);
+    z-index: 100;
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+  }
+
+  .skip-link:not(:focus) {
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* §4 The page grid: 4, 8 or 12 columns across the full viewport; above
+   --page-max it stops growing and centres. */
+@utility page-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--page-columns), minmax(0, 1fr));
+  column-gap: var(--spacing-gutter);
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--spacing-margin);
+}
+
+/* §3 Type roles. Display roles balance their lines and shift left by
+   0.05em so the stems, not the side bearings, sit on the grid edge. */
+@utility display-xl {
+  font-family: --theme(--font-serif);
+  font-weight: --theme(--font-weight-normal);
+  font-size: clamp(3.5rem, 10vw, 12rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  margin-inline-start: -0.05em;
+}
+
+@utility display-l {
+  font-family: --theme(--font-serif);
+  font-weight: --theme(--font-weight-normal);
+  font-size: clamp(2.5rem, 6vw, 6.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  margin-inline-start: -0.05em;
+}
+
+@utility display-m {
+  font-family: --theme(--font-serif);
+  font-weight: --theme(--font-weight-normal);
+  font-size: clamp(2rem, 3.6vw, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+@utility text-l {
+  font-family: --theme(--font-serif);
+  font-weight: --theme(--font-weight-normal);
+  font-size: clamp(1.5rem, 2.2vw, 2.25rem);
+  line-height: 1.25;
+  letter-spacing: 0;
+  text-wrap: pretty;
+  max-inline-size: 34ch;
+}
+
+/* Italic means the title of a work, and nothing else. */
+@utility caption-title {
+  font-family: --theme(--font-serif);
+  font-weight: --theme(--font-weight-normal);
+  font-style: italic;
+  font-size: 1.3125rem; /* 21px, the smallest Instrument Serif is set */
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-wrap: pretty;
+}
+
+@utility body {
+  font-family: --theme(--font-sans);
+  font-weight: --theme(--font-weight-normal);
+  font-size: 1rem;
+  line-height: 1.55;
+  letter-spacing: 0;
+  text-wrap: pretty;
+  max-inline-size: 60ch;
+}
+
+@utility meta {
+  font-family: --theme(--font-sans);
+  font-weight: --theme(--font-weight-normal);
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  text-wrap: pretty;
+}
+
+@utility ui {
+  font-family: --theme(--font-sans);
+  font-weight: --theme(--font-weight-medium);
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+/* §6.00 The NOIR wordmark: the only all-caps word on the site. */
+@utility wordmark {
+  font-family: --theme(--font-sans);
+  font-weight: --theme(--font-weight-medium);
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1;
+  letter-spacing: 0.2em;
+}

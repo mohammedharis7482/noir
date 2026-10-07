@@ -1,34 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NOIR
 
-## Getting Started
+A fictional photography portfolio designed as an exhibition catalogue: photography first, typography second, motion only where it has a purpose, interface almost invisible. A learning and showcase project, built to a production standard.
 
-First, run the development server:
+## Running it
+
+Node 22 (pinned in `.nvmrc`) and npm.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production build
+npm run lint    # ESLint; the build does not run it
+npm run plates  # after adding photographs while the dev server runs
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`dev` and `build` first list the photographs in `public/images/plates` into `src/content/plate-files.ts`, which tells `NoirImage` which plates exist.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`/specimen` shows the design system at work: both colour themes with contrast ratios, every type role, the grid (press `g` for the column overlay), image placeholders and a scroll test that checks Lenis and ScrollTrigger stay in sync. It is not linked from the site and asks search engines not to index it.
 
-## Learn More
+## Where things are
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `docs/DESIGN.md`: the design system and every composition. The source of truth.
+- `docs/BRIEF.md`: the original creative brief.
+- `docs/SHOTLIST.md`: the 21 photographs, their roles and file names.
+- `CLAUDE.md`: how the project is built, phase by phase.
+- `src/content/`: all copy, the plates, the five series and photo credits.
+- `public/images/plates/`: the photographs. A missing file renders as a placeholder.
