@@ -56,14 +56,26 @@ export const hoverCapable = "(hover: hover) and (pointer: fine)";
  *  motion code has started by then, the static page shows. */
 export const failsafe = 4;
 
-/** Pins compute in page order whatever order React mounts them in
- *  (MOTION.md §2.4): a higher priority refreshes first. */
-export const refreshPriority = {
-  hero: 4,
-  selectedWork: 3,
-  visualStories: 2,
-  fullscreen: 1,
-} as const;
+/** The homepage's sections that move, top down. */
+const pageOrder = [
+  "hero",
+  "intro",
+  "featured",
+  "selectedWork",
+  "editorial",
+  "visualStories",
+  "fullscreen",
+  "about",
+  "marquee",
+  "contact",
+] as const;
+
+/** Every trigger computes in page order whatever order React mounts them in
+ *  (MOTION.md §2.4): a higher priority refreshes first, so a pin's spacing is
+ *  in place before the triggers below it measure. Ties go top down. */
+export const refreshPriority = Object.fromEntries(
+  pageOrder.map((section, index) => [section, pageOrder.length - index]),
+) as Record<(typeof pageOrder)[number], number>;
 
 /**
  * The hero (MOTION.md §3), in seconds. `load` is the page-load sequence,
@@ -93,4 +105,75 @@ export const hero = {
     secondary: { until: 0.35 },
   },
   drift: { yPercent: 8 },
+} as const;
+
+/** Masked line reveals rise from one line's height below (MOTION.md §2.5). */
+export const lineRise = { fromYPercent: 100 } as const;
+
+/*
+ * Phase 4, entrances and statements (MOTION.md §4). Ranges are ScrollTrigger
+ * start and end positions; inside a scrubbed timeline, steps are [from, to]
+ * shares of its progress. Durations, delays and staggers are in seconds.
+ * Unless noted, the trigger is the section.
+ */
+
+/** §4.1. Desktop scrubs; the lines share the first 80% of the range, one
+ *  after another, and the metadata fades in over the last 20%, after the
+ *  last line (DESIGN.md §6.02). Mobile plays once. */
+export const intro = {
+  scrub: { start: "top 80%", end: "top 30%", lines: [0, 0.8], meta: [0.8, 1] },
+  once: { start: "top 85%", lines: { duration: 1, stagger: 0.1 }, meta: { duration: 0.6 } },
+} as const;
+
+/** §4.2. The trigger is the photograph's frame. The reveal scrubs at every
+ *  width; on desktop the photograph also drifts ±6% of its layer's height
+ *  while it is on screen. */
+export const featured = {
+  reveal: {
+    desktop: { start: "top 85%", end: "top 35%" },
+    mobile: { start: "top 90%", end: "top 50%" },
+    fromClip: "inset(100% 0% 0% 0%)",
+    toClip: "inset(0% 0% 0% 0%)",
+    fromScale: 1.15,
+  },
+  caption: { duration: 0.6 },
+  drift: { range: 6, start: "top bottom", end: "bottom top" },
+} as const;
+
+/** §4.3. Desktop: one scrubbed timeline. Line 2 slides in from one column
+ *  (and its gutter) to the right. Mobile: the statement plays once when its
+ *  top reaches 85% of the screen, its lines 0.12s apart, and the supporting
+ *  line when its own top does. */
+export const editorial = {
+  scrub: {
+    start: "top 75%",
+    end: "bottom 70%",
+    lineOne: [0, 0.3],
+    lineTwo: [0.15, 0.45],
+    settle: [0.2, 0.8],
+    fromScale: 0.97,
+    slide: [0.3, 0.8],
+    supporting: [0.7, 1],
+  },
+  once: { start: "top 85%", duration: 1, stagger: 0.12 },
+} as const;
+
+/** §4.4. The paragraph plays once; the portrait drifts ±4% across the
+ *  section at every width. */
+export const about = {
+  lines: { start: "top 75%", duration: 0.8, stagger: 0.06 },
+  drift: { range: 4, start: "top bottom", end: "bottom top" },
+} as const;
+
+/** §4.5. One loop, the width of one copy of the line, plays while the
+ *  marquee is on screen. */
+export const marquee = { loop: 40, onScreen: { start: "top bottom", end: "bottom top" } } as const;
+
+/** §4.6. Plays once at every width: the lines, then the email as the last
+ *  line comes to rest, then the CTA 0.3s after the email starts. */
+export const contact = {
+  start: "top 70%",
+  lines: { duration: 1.2, stagger: 0.18 },
+  email: { duration: 0.8 },
+  cta: { duration: 0.6, after: 0.3 },
 } as const;
