@@ -9,6 +9,7 @@ This file defines how NOIR moves. `DESIGN.md` defines how it looks. Where the tw
 - After any animation finishes, the page matches the approved Phase 2 screenshots pixel for pixel.
 - The reduced-motion experience is simply the static page, so it is always complete.
 - If a motion idea needs a different rest layout, it is a layout change: propose it and wait.
+- One exception: a photograph whose inner layer drifts (Featured, the About portrait) never shows an empty edge inside its frame, so in motion mode the drifting layer is oversized just enough to cover its drift. For a drift of ±d of the layer's own height, it reaches d / (1 − 2d) of the frame's height beyond the frame's top and bottom, plus a pixel so that rounding never leaves a hairline: about 6.8% for Featured's ±6%, 4.3% for the portrait's ±4%. The photograph's crop may be that much tighter than on the static page. Everything else must still match the static page exactly (`DESIGN.md` §12, row 35).
 
 Personality: slow, intentional, precise. Motion behaves like a camera or like paper, never like an interface demo.
 
@@ -89,6 +90,7 @@ There are four pins on desktop, in page order: Hero, Selected work, Visual stori
 ### 2.8 Scrolling
 
 - All programmatic scrolling uses `lenis.scrollTo` when Lenis exists, native scrolling otherwise.
+- One exception: after a full ScrollTrigger refresh, `SmoothScroll` restores the reader's place with a native `window.scrollTo`. Lenis hasn't seen the refresh's jump to the top yet, so its `scrollTo` to the same place returns early, while Lenis follows a native scroll (`DESIGN.md` §12, row 33).
 - `lenis.stop()` while the menu is open; `lenis.start()` when it closes.
 
 ---
@@ -111,6 +113,7 @@ Desktop and mobile. Time-based, plays once. Scrolling is never blocked.
 - The headline waits for `document.fonts.ready` and its split, but no longer than 1.2s after load. If fonts arrive later, `autoSplit` re-splits and the lines end in place.
 - The headline must never flash visible before its animation. Its hidden state comes from CSS under `html[data-motion]`.
 - Total: about 2 seconds. It should feel like a darkroom light coming up, not like a website loading.
+- It plays once per visit. Returning to the home page without a reload (a client-side link from `/credits`) shows the hero at rest (`DESIGN.md` §12, row 34).
 
 ### 3.2 Scroll: the camera leans in (desktop)
 
@@ -129,7 +132,7 @@ No pin. The push layer drifts yPercent 0 → 8 as the hero leaves the screen (sc
 
 ### 3.4 Reduced motion
 
-The hero is static. At most, the whole hero fades in from opacity 0 to 1 over 0.3s.
+The hero is fully static, with no fade (`DESIGN.md` §12, row 32).
 
 ### 3.5 Acceptance
 
@@ -337,6 +340,7 @@ The self-hosted subset task already recorded in `CLAUDE.md`.
 ## 9. Performance budget (Phase 9)
 
 - Lighthouse, mobile: performance ≥ 90. LCP under 2.5s (the hero photograph), CLS under 0.02, INP under 200ms.
+- The failsafe (§2.1) stays at 4 seconds until it is measured against that LCP budget here. On a slow connection the JavaScript arrives after the failsafe, so the hero shows only when the failsafe fires (about 8.8s on Chrome's Slow 3G in Phase 3). If LCP fails, the first fixes to try are a shorter failsafe and showing the photograph without waiting for JavaScript (`DESIGN.md` §12, row 31).
 - Desktop: a steady 60fps through every pin in Chrome's Performance panel at 1440×900, and no long tasks over 50ms while scrolling.
 - ScrollTriggers: list every one with its section. Target 25 or fewer on desktop.
 - Images: AVIF on; every `sizes` value correct; no image over 400KB transferred on a mobile viewport.

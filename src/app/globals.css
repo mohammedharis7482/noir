@@ -244,6 +244,57 @@
     margin-bottom: calc(-1 * var(--hero-descender));
   }
 
+  /* MOTION.md §2.5: the masked lines of the entrances and statements
+     (src/lib/reveal.ts). Instrument Serif's descenders (g, p, q, y) reach
+     0.219em below the baseline, past the line box of display-m and the
+     larger roles; each line carries room for them (0.24em less the role's
+     --baseline-inset, so none for text-l), and its mask gives it back:
+     nothing is clipped and nothing moves. */
+  .reveal-line,
+  .reveal-line-mask {
+    --descender-room: max(0em, 0.24em - var(--baseline-inset, 0em));
+  }
+
+  .reveal-line {
+    padding-bottom: var(--descender-room);
+  }
+
+  .reveal-line-mask {
+    margin-bottom: calc(-1 * var(--descender-room));
+  }
+
+  /* MOTION.md §0 and §4: a NoirImage layer that drifts ±d of its own height
+     (--noir-drift is d). In motion mode it reaches d / (1 − 2d) of the
+     frame's height past the frame's top and bottom, plus a pixel so that
+     rounding never leaves a hairline: just enough that the frame never
+     shows an empty edge. On the static page it is the frame's own size.
+     "lg" drifts on desktop only. */
+  [data-noir-drift] {
+    inset-block: 0;
+  }
+
+  /* MOTION.md §4.5: the marquee's second copy, which its loop needs, exists
+     only in motion mode. The static page and reduced motion show one line. */
+  [data-marquee-copy] {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html[data-motion] [data-noir-drift="always"] {
+      inset-block: calc(-100% * var(--noir-drift) / (1 - 2 * var(--noir-drift)) - 1px);
+    }
+
+    html[data-motion] [data-noir-drift="lg"] {
+      @variant lg {
+        inset-block: calc(-100% * var(--noir-drift) / (1 - 2 * var(--noir-drift)) - 1px);
+      }
+    }
+
+    html[data-motion] [data-marquee-copy] {
+      display: inline;
+    }
+  }
+
   /* §6.04 Selected work: the stage's type (index, counter, title) sits on
      the lines of Morning Light's main photograph, 76svh tall and centred,
      so 12svh in from the stage's top and bottom edges. */

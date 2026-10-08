@@ -192,7 +192,7 @@ cols  1    2    3    4    5    6    7    8    9    10   11   12
 
 Motion intent (the full specification is `MOTION.md` §3)
 
-- **Load** (the only page-load sequence on the site): the photograph fades in while settling from scale 1.08 to 1. The headline lines rise inside line masks, starting 0.4s later with a 0.1s stagger. Metadata and caption fade in last.
+- **Load** (the only page-load sequence on the site): the photograph fades in while settling from scale 1.08 to 1. The headline lines rise inside line masks, starting 0.4s later with a 0.1s stagger. Metadata and caption fade in last. It plays once per visit (§12, row 34).
 - **Scroll, desktop only:** the camera leans in (`MOTION.md` §3.2). The hero pins with `pinSpacing: false` for 80% of a viewport while an inner layer of the photograph scales from 1 to 1.1 and rises 3%; the frame itself doesn't change (§12, row 30). The headline drifts up and fades out, and the metadata and caption fade out. The Intro section, which has a solid paper background and a higher z-index, slides up over the photograph like a page laid over a print.
 
 ### 02 Intro statement
@@ -508,7 +508,7 @@ Lenis smooths wheel input only; touch scrolling stays native.
 
 ## 9. Accessibility floor
 
-- **Reduced motion:** no Lenis, no pins, no scrubbed transforms. All content renders in its final state, the marquee is static, and the hero is static too (`MOTION.md` §3.4 allows at most a 0.3s fade of the whole hero; there is none).
+- **Reduced motion:** no Lenis, no pins, no scrubbed transforms. All content renders in its final state, the marquee is static, and the hero is static too, with no fade (§12, row 32).
 - **Contrast:** all text at least 4.5:1 (§2). Text over photographs per §6.07.
 - **Focus:** a 1px solid `currentColor` outline with a 4px offset on every interactive element. A "Skip to content" link comes first in the page.
 - **Semantics:** header and nav, main, footer landmarks; sections labelled by their headings; exactly one h1 per page (the hero headline on the home page, `Notes and credits` on `/credits`).
@@ -656,3 +656,8 @@ All copy lives in `src/content/copy.ts`. Captions describe the current plates; w
 | 28 | When a real photograph replaces a stand-in and `credits.ts` gives it a photographer, its `/credits` row adds the photographer and a source link, and the first paragraph says the photographs are AI-generated unless credited (§6.12). Built when the first real photograph arrives | Decided after the Phase 2c review. Until then every plate shares one source, which the first paragraph states |
 | 29 | The other Phase 2c choices stand as built: the paper footer on `/credits` (row 24); its spacings (64px from the title to the paragraphs, 48px from “List of plates” to the list, 20vh from the list to the footer); Contact's email 64px below the statement; Contact on phones at `min(11vw, 3.5rem)` (row 26); below 1024px the footer stacks and About's facts keep two columns | Accepted after the Phase 2c review |
 | 30 | The hero's scroll follows `MOTION.md` §3.2: an inner push layer scales from 1 to 1.1 and rises 3% while the frame stays as it is. It replaces §6.01's frame that “opens down and to the left” | Growing the frame would need a full-viewport frame, which changes the approved rest crop and could cut the man out of it |
+| 31 | The motion failsafe stays at 4 seconds. Phase 9 measures it against the LCP budget (`MOTION.md` §9); if LCP fails, the first fixes to try are a shorter failsafe and showing the hero photograph without waiting for JavaScript | Decided after the Phase 3 review. On Chrome's Slow 3G the JavaScript arrives after the failsafe, so the hero shows when the failsafe fires, at about 8.8s |
+| 32 | Under reduced motion the hero is fully static, with no fade (§9, `MOTION.md` §3.4) | Decided after the Phase 3 review. A fade would need a hidden state of its own before first paint |
+| 33 | After a full ScrollTrigger refresh, the reader's place is restored with a native scroll: the one exception to scrolling with Lenis (`MOTION.md` §2.8) | Decided after the Phase 3 review. Lenis hasn't seen the refresh's jump to the top, so its `scrollTo` to the same place returns early |
+| 34 | The hero's load sequence plays once per visit; returning to the home page without a reload shows the hero at rest (`MOTION.md` §3.1) | Decided after the Phase 3 review |
+| 35 | In motion mode a drifting photograph's inner layer (Featured, the About portrait) is oversized just enough to cover its drift, so its crop may be that much tighter than on the static page; everything else matches the static page exactly (`MOTION.md` §0) | Decided for Phase 4: no photograph may ever show an empty edge inside its frame, and a layer the size of its frame would show one at either end of its drift |
