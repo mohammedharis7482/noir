@@ -189,7 +189,13 @@ export function HeroMotion({ children, ...props }: ComponentPropsWithoutRef<"sec
           gsap.to(push, {
             yPercent: hero.drift.yPercent,
             ease: ease.linear,
-            scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub },
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "bottom top",
+              scrub,
+              refreshPriority: refreshPriority.hero,
+            },
           });
         }
       });

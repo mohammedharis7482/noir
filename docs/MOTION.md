@@ -144,21 +144,22 @@ The hero is fully static, with no fade (`DESIGN.md` §12, row 32).
 
 ## 4. Entrances and statements (Phase 4)
 
+Each trigger is its section, unless a subsection names another.
+
 ### 4.1 Intro statement
 
-- Desktop: scrubbed, `start: "top 80%"`, `end: "top 30%"`. Lines move yPercent 100 → 0, each over an equal share of the range. The metadata block fades in (opacity 0 → 1) over the last 20%.
+- Desktop: scrubbed, `start: "top 80%"`, `end: "top 30%"`. Lines move yPercent 100 → 0 one after another, each over an equal share of the first 80% of the range. The metadata block fades in (opacity 0 → 1) over the last 20%, after the last line.
 - Mobile: plays once at `"top 85%"`. Lines rise over 1.0s with a 0.1s stagger, then the metadata fades in over 0.6s.
 
 ### 4.2 Featured photograph: the clip reveal
 
-- Desktop and mobile: scrubbed. The frame's clip-path goes from `inset(100% 0 0 0)` to `inset(0% 0 0 0)` (revealed from the bottom edge upward) while the inner layer settles from scale 1.15 to 1.
-  - Desktop range: `"top 85%"` → `"top 35%"`. Mobile range: `"top 90%"` → `"top 50%"`.
-- The caption fades in (0.6s, `noir.out`) once the reveal has completed, and fades out again if the reveal is reversed.
-- Desktop only: while the photograph is in view, its inner layer drifts yPercent -6 → 6, scrubbed from `"top bottom"` to `"bottom top"`.
+- Desktop and mobile: scrubbed, with the photograph's frame as the trigger, from `"top 85%"` to `"bottom 85%"`. The frame's clip-path goes from `inset(0 0 100% 0)` to `inset(0% 0 0 0)`: it opens from its top edge downward exactly as fast as the page scrolls, so its moving edge holds on a line 85% down the screen at every size, where the reader sees it. Meanwhile the inner layer settles from scale 1.15 to 1. At 1280×720, 1440×900 and 1920×1080 the reveal ends with the whole photograph on screen (`DESIGN.md` §12, row 36).
+- The caption fades in (0.6s, `noir.out`) once the reveal has completed, and fades out again (0.6s) if the reveal is reversed.
+- Desktop only: while the photograph is in view, a layer inside the settling one drifts yPercent -6 → 6, scrubbed from `"top bottom"` to `"bottom top"`, with the frame as the trigger.
 
 ### 4.3 Editorial statement
 
-Desktop, one scrubbed timeline from `"top 75%"` to `"bottom 70%"`:
+Desktop, one scrubbed timeline from `"top 75%"` to `"bottom bottom"`, so it ends with the whole statement on screen (`DESIGN.md` §12, row 37):
 
 | Progress | What happens |
 |---|---|
@@ -168,7 +169,7 @@ Desktop, one scrubbed timeline from `"top 75%"` to `"bottom 70%"`:
 | 0.30 – 0.80 | line 2 slides from one column to the right (column plus gutter, measured) to its rest position |
 | 0.70 – 1.00 | the supporting line rises into place |
 
-Mobile: the three lines rise once each at `"top 85%"`, 1.0s, 0.12s stagger. No scale, no slide.
+Mobile: the statement plays once when its own top reaches `"top 85%"`, its lines rising over 1.0s, 0.12s apart. The supporting line plays the same way, on its own trigger, when its top reaches 85%. No scale, no slide.
 
 ### 4.4 About
 
@@ -188,7 +189,7 @@ Mobile: the three lines rise once each at `"top 85%"`, 1.0s, 0.12s stagger. No s
 Plays once at `"top 70%"`, desktop and mobile:
 
 1. Statement lines rise: 1.2s each, 0.18s stagger, `noir.out`.
-2. The email fades in (0.8s), starting as the last line settles.
+2. The email fades in (0.8s), starting as the last line settles: at 1.56s for the statement's three lines.
 3. The CTA fades in (0.6s), 0.3s after the email starts.
 
 ---

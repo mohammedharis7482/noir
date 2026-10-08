@@ -126,13 +126,16 @@ export const intro = {
 } as const;
 
 /** §4.2. The trigger is the photograph's frame. The reveal scrubs at every
- *  width; on desktop the photograph also drifts ±6% of its layer's height
- *  while it is on screen. */
+ *  width: the frame opens from its top edge downward exactly as fast as the
+ *  page scrolls, so its moving edge holds on a line 85% down the screen,
+ *  from the frame's top reaching that line to its bottom reaching it. On
+ *  desktop the photograph also drifts ±6% of its layer's height while it is
+ *  on screen. */
 export const featured = {
   reveal: {
-    desktop: { start: "top 85%", end: "top 35%" },
-    mobile: { start: "top 90%", end: "top 50%" },
-    fromClip: "inset(100% 0% 0% 0%)",
+    start: "top 85%",
+    end: "bottom 85%",
+    fromClip: "inset(0% 0% 100% 0%)",
     toClip: "inset(0% 0% 0% 0%)",
     fromScale: 1.15,
   },
@@ -140,14 +143,15 @@ export const featured = {
   drift: { range: 6, start: "top bottom", end: "bottom top" },
 } as const;
 
-/** §4.3. Desktop: one scrubbed timeline. Line 2 slides in from one column
- *  (and its gutter) to the right. Mobile: the statement plays once when its
- *  top reaches 85% of the screen, its lines 0.12s apart, and the supporting
- *  line when its own top does. */
+/** §4.3. Desktop: one scrubbed timeline, which ends as the section's bottom
+ *  reaches the screen's, with the whole statement on screen. Line 2 slides
+ *  in from one column (and its gutter) to the right. Mobile: the statement
+ *  plays once when its top reaches 85% of the screen, its lines 0.12s
+ *  apart, and the supporting line when its own top does. */
 export const editorial = {
   scrub: {
     start: "top 75%",
-    end: "bottom 70%",
+    end: "bottom bottom",
     lineOne: [0, 0.3],
     lineTwo: [0.15, 0.45],
     settle: [0.2, 0.8],

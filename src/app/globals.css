@@ -187,7 +187,6 @@
     --display-xl-size: min(14vw, 14svh);
     --hero-photo: min(125vw, 62svh); /* 4:5 across the width, at most 62svh */
     --hero-gap: var(--spacing-8); /* the least space above the headline */
-    --hero-descender: 0.1em; /* the y of "story" hangs 0.095em below the line */
 
     @variant lg {
       --display-xl-size: clamp(3.5rem, min(10vw, 14svh), 12rem);
@@ -233,32 +232,26 @@
     }
   }
 
-  /* The headline's lines while they rise (HeroMotion). The "y" hangs below
-     display-xl's 0.9 line box, so each line carries room for it, and its
-     mask gives that room back: nothing is clipped and nothing moves. */
-  .hero-line {
-    padding-bottom: var(--hero-descender);
-  }
-
-  .hero-line-mask {
-    margin-bottom: calc(-1 * var(--hero-descender));
-  }
-
-  /* MOTION.md §2.5: the masked lines of the entrances and statements
-     (src/lib/reveal.ts). Instrument Serif's descenders (g, p, q, y) reach
-     0.219em below the baseline, past the line box of display-m and the
-     larger roles; each line carries room for them (0.24em less the role's
-     --baseline-inset, so none for text-l), and its mask gives it back:
-     nothing is clipped and nothing moves. */
+  /* MOTION.md §2.5: masked lines, the hero headline's (HeroMotion) and the
+     entrances' and statements' (src/lib/reveal.ts). Instrument Serif's
+     descenders (g, p, q, y) reach 0.219em below the baseline, past the line
+     box of display-m and the larger roles (the "y" of the hero's "Every" and
+     "story" hangs 0.109em below display-xl's). Each line carries room for
+     them, 0.24em less the role's --baseline-inset (none for text-l), and its
+     mask gives it back: nothing is clipped and nothing moves. */
+  .hero-line,
+  .hero-line-mask,
   .reveal-line,
   .reveal-line-mask {
     --descender-room: max(0em, 0.24em - var(--baseline-inset, 0em));
   }
 
+  .hero-line,
   .reveal-line {
     padding-bottom: var(--descender-room);
   }
 
+  .hero-line-mask,
   .reveal-line-mask {
     margin-bottom: calc(-1 * var(--descender-room));
   }

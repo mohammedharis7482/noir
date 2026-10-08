@@ -230,7 +230,7 @@ cols  1    2    3    4    5    6    7    8    9    10   11   12
 
 - A standalone photograph, not one of the five series.
 - Caption at cols 11–12, bottom-aligned with the photograph.
-- Motion: clip reveal from the bottom edge upward, scrubbed as it enters, while the inner image settles from scale 1.15 to 1. While in view, the inner image keeps a gentle vertical drift (about ±6%). The caption fades in after the reveal completes.
+- Motion: clip reveal from the top edge downward, scrubbed as it enters. The photograph opens as it rises past a line 85% down the screen, so the edge that moves is always in view (§12, row 36), while the inner image settles from scale 1.15 to 1. While in view, the inner image keeps a gentle vertical drift (about ±6%). The caption fades in after the reveal completes.
 - Mobile: photograph full-bleed, caption below at the left edge.
 
 ### 04 Selected work (the pinned story)
@@ -661,3 +661,5 @@ All copy lives in `src/content/copy.ts`. Captions describe the current plates; w
 | 33 | After a full ScrollTrigger refresh, the reader's place is restored with a native scroll: the one exception to scrolling with Lenis (`MOTION.md` §2.8) | Decided after the Phase 3 review. Lenis hasn't seen the refresh's jump to the top, so its `scrollTo` to the same place returns early |
 | 34 | The hero's load sequence plays once per visit; returning to the home page without a reload shows the hero at rest (`MOTION.md` §3.1) | Decided after the Phase 3 review |
 | 35 | In motion mode a drifting photograph's inner layer (Featured, the About portrait) is oversized just enough to cover its drift, so its crop may be that much tighter than on the static page; everything else matches the static page exactly (`MOTION.md` §0) | Decided for Phase 4: no photograph may ever show an empty edge inside its frame, and a layer the size of its frame would show one at either end of its drift |
+| 36 | Featured (§6.03): the clip reveal opens from the photograph's top edge downward, from the frame's top reaching 85% of the screen to its bottom reaching it, so the moving edge holds on that line at every size (`MOTION.md` §4.2) | Decided after the Phase 4 review. Opening from the bottom edge put the first half of the reveal below the fold on desktop, where the frame is taller than the space below 85% |
+| 37 | Editorial (§6.05): the desktop timeline ends at `"bottom bottom"`, with the whole statement on screen at 1280×720, 1440×900 and 1920×1080 (`MOTION.md` §4.3) | Decided after the Phase 4 review. At `"bottom 70%"`, line 1 had partly or fully left the top of the screen by the time the timeline ended |
