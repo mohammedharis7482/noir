@@ -55,6 +55,14 @@ export function SelectedWorkMotion({ children, ...props }: ComponentPropsWithout
               onComplete: onArrive,
             });
           },
+          // Only the wheel's smoothing, whose target lies ahead of it: an
+          // index row's scrollTo moves its target along and runs on.
+          halt: () => {
+            const smooth = lenisRef.current;
+            if (smooth?.isScrolling !== "smooth" || smooth.targetScroll === smooth.animatedScroll) return;
+            smooth.stop();
+            smooth.start();
+          },
         });
       });
     },

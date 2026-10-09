@@ -19,6 +19,8 @@ type PageTurnOptions = {
   stack: HTMLElement;
   /** Scrolls to y, Lenis when it runs, and calls back on arrival. */
   travel: (y: number, onArrive: () => void) => void;
+  /** Stops the wheel's smoothing where it is, so a snap alone moves the scroll. */
+  halt: () => void;
 };
 
 /**
@@ -26,7 +28,7 @@ type PageTurnOptions = {
  * cleanup, or nothing if the stages aren't all there (the static stages
  * then stay as they are).
  */
-export function buildPageTurn({ story, stack, travel }: PageTurnOptions): (() => void) | undefined {
+export function buildPageTurn({ story, stack, travel, halt }: PageTurnOptions): (() => void) | undefined {
   const series = stagesOf(stack);
   if (!series) return;
   const last = series.length - 1;
@@ -114,13 +116,17 @@ export function buildPageTurn({ story, stack, travel }: PageTurnOptions): (() =>
     refreshPriority: refreshPriority.selectedWork,
     // Inertia off: ScrollTrigger measures the speed of the scrubbed
     // timeline, which is still catching up when the scroll has stopped, and
-    // would carry a reader already at a rest point on to the next one.
+    // would carry a reader already at a rest point on to the next one. A
+    // snap starts once the scroll has stopped moving by whole pixels, while
+    // Lenis may still be easing out the last fraction of a pixel; left
+    // running, it would write its own position under the snap for a frame.
     snap: {
       snapTo,
       duration: selectedWork.snap.duration,
       delay: selectedWork.snap.delay,
       ease: ease.inOut,
       inertia: false,
+      onStart: halt,
     },
     build: (timeline) => {
       page = timeline;
