@@ -11,7 +11,7 @@ import { ease, scrub } from "@/lib/motion";
  *  are created. GSAP otherwise defers them to its next tick when it hasn't
  *  rendered yet in the current frame, and until then new lines sit visible
  *  in place (MOTION.md §0). */
-const writeAtOnce = { lazy: false } as const;
+export const writeAtOnce = { lazy: false } as const;
 
 /** Text whose entrance has played, or never had to because the reader had
  *  already passed it: it stays at rest while it is mounted, even when a

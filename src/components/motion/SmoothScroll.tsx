@@ -12,6 +12,19 @@ const GSAP_ADJUSTED_LAG = 33;
 
 const LenisContext = createContext<Lenis | null>(null);
 
+/** Where the next full refresh leaves the reader, when a section has said. */
+let handedPlace: (() => number) | null = null;
+
+/**
+ * Moves the reader's place in the next full refresh: a section whose layout
+ * changes across 1024px keeps the reader on the same content. `place` runs
+ * once that refresh has measured the new layout, and returns a scroll
+ * position.
+ */
+export function placeReader(place: () => number): void {
+  handedPlace = place;
+}
+
 /** Resolves when the window's load event has fired. */
 function pageLoaded(): Promise<void> {
   if (document.readyState === "complete") return Promise.resolve();
@@ -68,16 +81,24 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     // returns to the scroll position it recorded. But ScrollTrigger forgets
     // that position whenever the last trigger on the page is killed, and a
     // resize across 1024px does exactly that: the desktop triggers go, the
-    // mobile ones come. Keep the reader's place (MOTION.md §10.4). This is
-    // the one native scroll while Lenis runs: Lenis hasn't seen the refresh
-    // jump to the top yet, so its scrollTo would think it is already there;
-    // it follows the native scroll instead.
+    // mobile ones come. Keep the reader's place (MOTION.md §10.4), or move
+    // it where a section has placed it (placeReader). This is the one
+    // native scroll while Lenis runs: Lenis hasn't seen the refresh jump to
+    // the top yet, so its scrollTo would think it is already there; it
+    // follows the native scroll instead. That refresh measured every trigger
+    // and jumped every scrubbed timeline with the page at the top, so one
+    // more refresh, from the reader's place, lands them there at once rather
+    // than scrubbing there.
     let readerAt = 0;
     const record = () => {
       readerAt = window.scrollY;
     };
     const restore = () => {
-      if (Math.abs(window.scrollY - readerAt) >= 1) window.scrollTo(0, readerAt);
+      const place = handedPlace?.() ?? readerAt;
+      handedPlace = null;
+      if (Math.abs(window.scrollY - place) < 1) return;
+      window.scrollTo(0, place);
+      ScrollTrigger.refresh();
     };
     ScrollTrigger.addEventListener("refreshInit", record);
     ScrollTrigger.addEventListener("refresh", restore);

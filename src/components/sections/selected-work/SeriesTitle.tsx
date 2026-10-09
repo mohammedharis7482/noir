@@ -16,17 +16,20 @@ type SeriesTitleProps = {
 
 /**
  * A series' title in italic display type (it is the title of a work, §3)
- * with its details in meta beneath.
+ * with its details in meta beneath. The heading takes focus from script
+ * only: an index row moves focus to it once the pinned stage arrives at its
+ * series (MOTION.md §5.5).
  */
 export function SeriesTitle({ series, id, size, trimBaseline, className, ref }: SeriesTitleProps) {
   return (
     <div ref={ref} className={className}>
-      <h3 id={id} className={size === "l" ? "display-l italic" : "display-m italic"}>
+      <h3 id={id} tabIndex={-1} className={size === "l" ? "display-l italic" : "display-m italic"}>
         {series.copy.title}
       </h3>
       {/* At display-l the italic descenders (0.215em) would touch the
           details' capitals without the extra 8px. */}
       <p
+        data-series-details=""
         className={[
           "meta text-fg-muted",
           size === "l" && "mt-2",

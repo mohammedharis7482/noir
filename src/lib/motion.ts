@@ -181,3 +181,53 @@ export const contact = {
   email: { duration: 0.8 },
   cta: { duration: 0.6, after: 0.3 },
 } as const;
+
+/*
+ * Phase 5, the Selected work page-turn (MOTION.md §5). The pinned timeline
+ * has one unit per transition, series N to N + 1; inside a transition,
+ * steps are [from, to] shares of it (its local time, 0 → 1). The rest
+ * points are the whole units: the stage shows one series, exactly as its
+ * static stage.
+ */
+export const selectedWork = {
+  /** Four transitions, one viewport of scroll each. */
+  pin: { end: "+=400%" },
+  transition: {
+    outMain: [0, 0.7],
+    inMain: [0.3, 1],
+    outSupport: [0.15, 0.85],
+    inSupport: [0.45, 1],
+    outTitle: [0.2, 0.5],
+    inTitle: [0.5, 0.85],
+    outDetails: [0.2, 0.4],
+    inDetails: [0.6, 0.8],
+    counter: [0.4, 0.6],
+    /** The index's active row switches halfway through. */
+    index: 0.5,
+  },
+  clip: {
+    open: "inset(0% 0% 0% 0%)",
+    /** Where an incoming frame starts: it opens from its bottom edge. */
+    below: "inset(100% 0% 0% 0%)",
+    /** Where an outgoing frame ends: it closes upward. */
+    above: "inset(0% 0% 100% 0%)",
+  },
+  /** Inner layers, in yPercent: the outgoing image drifts up as its frame
+   *  closes, the incoming one settles from below as its frame opens. */
+  drift: { out: -8, in: 12 },
+  /** Title lines and counter digits leave upward, through the top of their masks. */
+  lineLeave: { toYPercent: -100 },
+  snap: { points: [0, 0.25, 0.5, 0.75, 1], duration: { min: 0.5, max: 0.8 }, delay: 0.15 },
+  /** Within this share of a transition of a rest point, about a pixel of
+   *  scroll, the stage is at rest there. */
+  restTolerance: 0.001,
+  /** An index row travels to its series' rest point (MOTION.md §5.5). Its
+   *  title takes focus once the stage is at rest there, or after `focusBy`. */
+  index: { duration: 1.2, focusBy: 2.5 },
+  /** §5.6, below 1024px: each photograph drifts ±5% of its layer's height
+   *  while on screen; each title's lines rise once. */
+  stack: {
+    drift: { range: 5, start: "top bottom", end: "bottom top" },
+    title: { start: "top 85%", duration: 1, stagger: 0.1 },
+  },
+} as const;

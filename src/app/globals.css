@@ -295,6 +295,49 @@
     --stage-inset: 12svh;
   }
 
+  /* MOTION.md §5.1: the pinned page-turn on desktop. The page-turn
+     (pageTurn.ts) sets data-turning on the story in the same task as the
+     series' start states, so until then the static stages show: a reload
+     in the middle of the story shows the right series at once, and the
+     failsafe has nothing to undo. The five stages share one 100svh stage,
+     the first at the bottom. The story keeps the static stages' height,
+     the stage and the 400vh of scroll the pin turns over ("+=400%"), so
+     nothing below it moves. Only the first stage's index and counter total
+     show, and only that index takes the pointer. Each counter's line is the
+     mask its digits roll through, clipping top and bottom only. The stage
+     has the paper's background: pinned, Chrome draws it on a layer of its
+     own, and only an opaque layer keeps the text's subpixel antialiasing,
+     so the pinned stage renders exactly as the static stages. */
+  @media (prefers-reduced-motion: no-preference) {
+    html[data-motion] [data-series-story][data-turning] {
+      @variant lg {
+        padding-bottom: 400vh;
+
+        & [data-stage-stack] {
+          display: grid;
+          background-color: var(--color-bg);
+        }
+
+        & .series-stage {
+          grid-area: 1 / 1;
+          pointer-events: none;
+        }
+
+        & .series-stage:first-child [data-stage-index] {
+          pointer-events: auto;
+        }
+
+        & .series-stage + .series-stage :is([data-stage-index], [data-counter-total]) {
+          visibility: hidden;
+        }
+
+        & [data-stage-counter] {
+          overflow: visible clip;
+        }
+      }
+    }
+  }
+
   /* §9 The skip link comes first in the page and shows only on keyboard
      focus. Back to top (§6.11) returns focus here; after a mouse click it
      stays hidden, as :focus-visible doesn't match. */

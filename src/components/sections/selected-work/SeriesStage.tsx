@@ -6,14 +6,9 @@ import type { Frame, Series } from "@/content/series";
 import { SeriesIndex } from "./SeriesIndex";
 import { SeriesTitle } from "./SeriesTitle";
 
-/** A stage's layers, for the pinned story in Phase 5. */
+/** A stage's root, which the static story scrolls to. */
 export type StageLayers = {
   readonly root: HTMLElement | null;
-  readonly index: HTMLOListElement | null;
-  readonly counter: HTMLParagraphElement | null;
-  readonly main: HTMLDivElement | null;
-  readonly support: HTMLDivElement | null;
-  readonly title: HTMLDivElement | null;
 };
 
 type SeriesStageProps = {
@@ -43,11 +38,12 @@ function frameSizes(frame: Frame): string {
 
 type StageFrameProps = {
   frame: Frame;
-  ref: Ref<HTMLDivElement>;
+  /** Which photograph of the series it is, for the page-turn (MOTION.md §5.3). */
+  role: "main" | "support";
 };
 
-/** One photograph on the stage: the layer that Phase 5 moves, around its frame. */
-function StageFrame({ frame, ref }: StageFrameProps) {
+/** One photograph on the stage, placed by the series' frame preset. */
+function StageFrame({ frame, role }: StageFrameProps) {
   const [first, last] = frame.cols;
   const style = {
     gridRow: 1,
@@ -58,7 +54,7 @@ function StageFrame({ frame, ref }: StageFrameProps) {
 
   return (
     <div
-      ref={ref}
+      data-stage-frame={role}
       style={style}
       className={[
         frame.placement ? placementClass[frame.placement] : "self-center",
@@ -84,23 +80,12 @@ function StageFrame({ frame, ref }: StageFrameProps) {
  * frame preset, the title and the counter. The type sits on two lines,
  * 12svh in from the stage's top and bottom edges (globals.css,
  * .series-stage), and the photographs' placements hang from the same lines.
+ * The counter's digits are an element of their own, so the pinned stage can
+ * roll them (MOTION.md §5.3).
  */
 export function SeriesStage({ series, position, total, onSelect, ref }: SeriesStageProps) {
   const root = useRef<HTMLElement>(null);
-  const index = useRef<HTMLOListElement>(null);
-  const counter = useRef<HTMLParagraphElement>(null);
-  const main = useRef<HTMLDivElement>(null);
-  const support = useRef<HTMLDivElement>(null);
-  const title = useRef<HTMLDivElement>(null);
-
-  useImperativeHandle(ref, () => ({
-    root: root.current,
-    index: index.current,
-    counter: counter.current,
-    main: main.current,
-    support: support.current,
-    title: title.current,
-  }));
+  useImperativeHandle(ref, () => ({ root: root.current }));
 
   const titleId = `${series.slug}-stage-title`;
 
@@ -112,22 +97,23 @@ export function SeriesStage({ series, position, total, onSelect, ref }: SeriesSt
       className="series-stage page-grid h-svh grid-rows-1 overflow-x-clip"
     >
       <SeriesIndex
-        ref={index}
         active={position}
         onSelect={onSelect}
         className="ui col-span-3 col-start-1 row-start-1 mt-[calc(var(--stage-inset)-var(--spacing-2)-var(--cap-inset))] self-start"
       />
       <p
-        ref={counter}
         aria-hidden="true"
+        data-stage-counter=""
         className="meta col-start-12 row-start-1 mt-[calc(var(--stage-inset)-var(--cap-inset))] self-start justify-self-end tabular-nums"
       >
-        {series.copy.number} / {String(total).padStart(2, "0")}
+        <span data-counter-digits="" className="inline-block">
+          {series.copy.number}
+        </span>
+        <span data-counter-total="">{` / ${String(total).padStart(2, "0")}`}</span>
       </p>
-      <StageFrame ref={main} frame={series.main} />
-      {series.support && <StageFrame ref={support} frame={series.support} />}
+      <StageFrame role="main" frame={series.main} />
+      {series.support && <StageFrame role="support" frame={series.support} />}
       <SeriesTitle
-        ref={title}
         series={series}
         id={titleId}
         size="l"
